@@ -1,0 +1,10 @@
+{
+    "testing":{
+        "database":"postgres",
+        "username":"postgres",
+        "password":"mysecretpassword",
+        "host":"localhost",
+        "dialect":"postgres",
+        "port":5432 
+    } 
+}

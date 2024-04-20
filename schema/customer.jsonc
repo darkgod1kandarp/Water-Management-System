@@ -1,0 +1,16 @@
+{
+    "id":"uuid",
+    "name":"string",
+    "route_id": "uuid",
+    "bottle_tally":"int",
+    "address":"string",
+    "created_at":"timestamp",
+    "updated_at":"timestamp"
+}
+
+
+
+
+
+
+

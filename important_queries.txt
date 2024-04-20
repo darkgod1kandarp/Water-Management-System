@@ -1,0 +1,3 @@
+# For adding admin to the database     
+
+Insert into users (username, password, "isAdmin") values ('kandarp', crypt('user_password', '$2a$10$Ur4McDr64HYDC1SL5XKpSu'),TRUE);

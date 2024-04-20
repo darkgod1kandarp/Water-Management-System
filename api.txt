@@ -1,0 +1,18 @@
+# Database Side  
+1) Schema wrritting    
+2) Way to generate table in schema for all models       
+
+
+# How to write curl post request    
+curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' http://example.com/api/endpoint
+
+$headers = @{ "Content-Type" = "application/json" }
+$data = @{ "username" = "kandarp"; "password" = "ebefbwkf"; "isAdmin" = $false; "isNew" = $true }
+Invoke-WebRequest -Uri "http://localhost:3000/api/users" -Method Post -Headers $headers -Body ($data | ConvertTo-Json)
+
+$headers  =  @{ "Content-Type" = "application/json" } 
+$data  = @{"route_name" = "Sector1"}    
+Invoke-WebRequest  -Uri  "http://localhost:3000/api/routes"  -Method Post  -Headers $headers  -Body  ($data  | ConvertTo-Json)
+
+
+curl http://localhost:3000/api/routes/17baf8fe-a88e-4822-9ab4-c8cb1e335eb1

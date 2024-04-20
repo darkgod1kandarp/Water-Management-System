@@ -1,0 +1,6 @@
+{
+    "id": "uuid",
+    "truck_no": "string",
+    "created_at":"timestamp",
+    "updated_at":"timestamp"
+}
