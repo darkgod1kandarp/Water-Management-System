@@ -5,7 +5,7 @@ import { Op } from 'sequelize';
 
 const logger = getLogger();   
 const DriverEntriesController = {  
-    
+
     async getDriverEntries(req: Request, res: Response) {
         const driverEntries = await DriverEntries.findAll();
         logger.info('Getting all the driver entries');
