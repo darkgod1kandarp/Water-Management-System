@@ -8,6 +8,6 @@ router.get('/', userCriteria, UserController.getUsers);
 router.get('/:id',userCriteria, UserController.getUser); 
 router.post('/login', UserController.login);
 router.post('/',userCriteria, UserController.createUser);
-router.put('/:id',userCriteria, UserController.updateUser);
+router.put('/:id', UserController.updateUser);
 
 export default router;

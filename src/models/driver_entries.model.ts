@@ -26,10 +26,6 @@ export default sequelize.define('driver_entries', {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        bottle_tally: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
         truck_no: {
             type: DataTypes.UUID,   
             references: {

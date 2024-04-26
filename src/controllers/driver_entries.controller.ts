@@ -5,11 +5,13 @@ import { Op } from 'sequelize';
 
 const logger = getLogger();   
 const DriverEntriesController = {  
+    
     async getDriverEntries(req: Request, res: Response) {
         const driverEntries = await DriverEntries.findAll();
         logger.info('Getting all the driver entries');
         res.json(driverEntries);
     },   
+
     async getDriverEntry(req: Request, res: Response) {
         const { id } = req.params;
         const driverEntry = await DriverEntries.findByPk(id);
@@ -20,6 +22,7 @@ const DriverEntriesController = {
         }
         res.json(driverEntry);
     },  
+
     async createDriverEntry(req: Request, res: Response) {
         try {
             const driverEntry = await DriverEntries.create(req.body);
