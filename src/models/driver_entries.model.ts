@@ -59,8 +59,8 @@ export default sequelize.define('driver_entries', {
                     console.log(entry);  
                     if (customer) {
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
-                        console.log(entry.bottle_tally, customer.bottle_tally, entry.bottle_delivered, entry.bottle_received)
                         customer.bottle_tally = entry.bottle_tally; 
+                        console.log(customer.bottle_tally, entry.bottle_tally, "Total number of tally")
                         await customer.save();
                     } else {
                         throw new Error(`Customer with id ${entry.customer_id} not found`);
