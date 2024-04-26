@@ -65,6 +65,7 @@ export default sequelize.define('driver_entries', {
                     } else {
                         throw new Error(`Customer with id ${entry.customer_id} not found`);
                     }
+                    return entry;
                 },
                 beforeUpdate: async (entry:any) => {
                     entry.updated_at = new Date();
