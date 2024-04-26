@@ -42,14 +42,6 @@ export default sequelize.define('driver_entries', {
             },
             allowNull: false,
         },
-        route_id: {
-            type: DataTypes.UUID,
-            references: {
-                model: 'routes',
-                key: 'id'
-            },
-            allowNull: false,
-        },
         created_at: {
             type: DataTypes.DATE,
             defaultValue: new Date(),
