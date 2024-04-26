@@ -38,7 +38,7 @@ const DriverEntriesController = {
     async getDriverHistory(req: Request, res: Response) {
         try{
             const { id } = req.params;
-            const driverEntries = await DriverEntries.findAll({where: {driver_id: id},include: Customer});
+            const driverEntries = await DriverEntries.findAll({where: {driver_id: id},include: [{model: Customer, as: 'customer'}]});
             logger.info(`Getting the driver history with id ${id}`);
             res.json(driverEntries);
         } catch(error){
