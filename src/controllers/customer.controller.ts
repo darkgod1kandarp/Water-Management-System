@@ -16,7 +16,7 @@ const  CustomerController = {
     async getCustomers(req: Request, res: Response) {
         const customers = await Customer.findAll({
             include: [{
-              model: Routes, as: 'routes',
+              model: Routes, as: 'route_id',
               required: true // This ensures only orders with associated customers are returned
             }]});
         
