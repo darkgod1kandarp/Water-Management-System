@@ -14,7 +14,10 @@ const  CustomerController = {
 
     // Get all the customers
     async getCustomers(req: Request, res: Response) {
-        const customers = await Customer.findAll({include: Routes});
+        
+        const page =  parseInt(req.query.page as string) || 1;   
+        const limit = parseInt(req.query.limit as string) || 10;
+        const customers = await Customer.findAll({include: Routes, offset: (page - 1) * limit, limit: limit});
         logger.info('Getting all the customers');
         res.json(customers);
     },
@@ -33,7 +36,6 @@ const  CustomerController = {
 
     // Create the customer details
     async createCustomer(req: Request, res: Response) {
-
         // Ensuring customer name to be unique
         try {
             const customer = await Customer.create(req.body);
@@ -50,7 +52,6 @@ const  CustomerController = {
     // Update the customer details 
     async updateCustomer(req: Request, res: Response) {
         const { id } = req.params;
-
         // Checking if customer exists
         const customer = await Customer.findByPk(id);
         if (!customer) {
@@ -102,7 +103,6 @@ const  CustomerController = {
     // Search for a customer by name  while creating table using customer 
     async searchCustomer(req: Request, res: Response) {  
         const { name } = req.params;
-
         // It will find like name wise query on the customer table    
         const customer = await Customer.findAll({
             where: {
