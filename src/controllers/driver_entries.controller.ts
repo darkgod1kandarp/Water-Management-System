@@ -41,6 +41,7 @@ const DriverEntriesController = {
             logger.info(`Getting the driver history with id ${id}`);
             res.json(driverEntries);
         } catch(error){
+            console.log(error);
             logger.error('Error while getting the driver history');
             return res.sendStatus(500);
         }
