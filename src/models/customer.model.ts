@@ -61,7 +61,7 @@ const Customers = sequelize.define('customer', {
 },
 );
 
-Customers.belongsTo(Route, { foreignKey: 'routeId' });
+Customers.belongsTo(Route, { foreignKey: 'customer.route_id' });
 
 export default Customers;
 
