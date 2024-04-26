@@ -16,7 +16,7 @@ const  CustomerController = {
     async getCustomers(req: Request, res: Response) {
         const customers = await Customer.findAll({
             include: [{
-              model: Routes
+              model: Routes,
               required: true 
             }]});
         
