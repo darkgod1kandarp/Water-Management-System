@@ -17,7 +17,7 @@ route.post("/", (req, res) => {
     DriverEntriesController.createDriverEntry(req, res);
 });
 
-route.get('/:id', (req, res) =>{
+route.get('/history/:id', (req, res) =>{
     DriverEntriesController.getDriverHistory(req, res);
 })
 
