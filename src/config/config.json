@@ -2,7 +2,7 @@
     "testing":{
         "database":"postgres",
         "username":"postgres",
-        "password":"mysecretpassword",
+        "password":"mynewpassword",
         "host":"localhost",
         "dialect":"postgres",
         "port":5432 
