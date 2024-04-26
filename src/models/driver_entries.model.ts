@@ -56,7 +56,7 @@ export default sequelize.define('driver_entries', {
             hooks: {
                 beforeCreate: async (entry:any) => {
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
-                    console.log(customer);  
+                    console.log(entry);  
                     if (customer) {
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
                         console.log(entry.bottle_tally, customer.bottle_tally, entry.bottle_delivered, entry.bottle_received)
