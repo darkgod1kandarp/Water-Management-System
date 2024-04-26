@@ -61,6 +61,7 @@ export default sequelize.define('driver_entries', {
                         try{
                         console.log('customer found');
                         entry.bottle_tally = customer.bottle_tally + entry.bottle_delivered - entry.bottle_received;
+                        console.log(entry.bottle_tally, customer.bottle_tally, entry.bottle_delivered, entry.bottle_received)
                         customer.bottle_tally = entry.bottle_tally; 
                         await customer.save();
                         console.log('customer updated');
