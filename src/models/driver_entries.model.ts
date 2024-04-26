@@ -1,10 +1,10 @@
 import {sequelize, DataTypes}  from  '../utils/sequelize';  
 import customerModel  from './customer.model';
-import { v4 as uuidv4 } from 'uuid';
+
 
 
 // Define the DriverEntries model
-export default sequelize.define('driver_entries', {
+const Drivers =  sequelize.define('driver_entries', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -73,3 +73,6 @@ export default sequelize.define('driver_entries', {
             },
         }
     )
+
+Drivers.belongsTo(customerModel, {foreignKey: 'customer_id', targetKey: 'id', as: 'customer'});
+export default Drivers;
