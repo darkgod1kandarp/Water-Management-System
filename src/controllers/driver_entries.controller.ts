@@ -2,6 +2,7 @@ import DriverEntries  from "../models/driver_entries.model";
 import getLogger from '../utils/logger';   
 import { Request, Response } from 'express';  
 import { Op } from 'sequelize';   
+import Customer from '../models/customer.model';
 
 const logger = getLogger();   
 const DriverEntriesController = {  
@@ -37,7 +38,7 @@ const DriverEntriesController = {
     async getDriverHistory(req: Request, res: Response) {
         try{
             const { id } = req.params;
-            const driverEntries = await DriverEntries.findAll({where: {driver_id: id}});
+            const driverEntries = await DriverEntries.findAll({where: {driver_id: id},include: Customer});
             logger.info(`Getting the driver history with id ${id}`);
             res.json(driverEntries);
         } catch(error){

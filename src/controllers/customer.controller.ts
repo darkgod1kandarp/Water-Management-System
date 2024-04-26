@@ -15,7 +15,6 @@ const  CustomerController = {
     // Get all the customers
     async getCustomers(req: Request, res: Response) {
         const customers = await Customer.findAll({include: Routes});
-        
         logger.info('Getting all the customers');
         res.json(customers);
     },
