@@ -29,8 +29,19 @@ const DriverEntriesController = {
             logger.info('Creating a new driver entry');
             res.json(driverEntry);
         } catch (error) {
-            console.log(error);
             logger.error('Error while creating a new driver entry');
+            return res.sendStatus(500);
+        }
+    },
+
+    async getDriverHistory(req: Request, res: Response) {
+        try{
+            const { id } = req.params;
+            const driverEntries = await DriverEntries.findAll({where: {driver_id: id}});
+            logger.info(`Getting the driver history with id ${id}`);
+            res.json(driverEntries);
+        } catch(error){
+            logger.error('Error while getting the driver history');
             return res.sendStatus(500);
         }
     }
