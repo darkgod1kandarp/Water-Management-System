@@ -58,11 +58,16 @@ export default sequelize.define('driver_entries', {
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
                     console.log(customer);  
                     if (customer) {
+                        try{
                         console.log('customer found');
                         entry.bottle_tally = customer.bottle_tally + entry.bottle_delivered - entry.bottle_received;
                         customer.bottle_tally = entry.bottle_tally; 
                         await customer.save();
                         console.log('customer updated');
+                        }
+                        catch (error) {
+                            console.log(error);
+                        }
                     } else {
                         throw new Error(`Customer with id ${entry.customer_id} not found`);
                     }
