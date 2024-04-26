@@ -38,6 +38,7 @@ const DriverEntriesController = {
     async getDriverHistory(req: Request, res: Response) {
         const page =  parseInt(req.query.page as string) || 1;   
         const limit = parseInt(req.query.limit as string) || 10;
+        console.log("Page", page, "Limit", limit)
         try{
             const { id } = req.params;
             const driverEntries = await DriverEntries.findAll({where: {driver_id: id},include: [{model: Customer, as: 'customer'}], offset: (page - 1) * limit, limit: limit});
