@@ -1,10 +1,11 @@
 import {sequelize, DataTypes, Sequelize}  from  '../utils/sequelize';  
 import getLogger from '../utils/logger';
+import Route from './routes.model';
 
 const logger = getLogger();
 
 // Define the Customer model   
-export default sequelize.define('customer', {
+const Customers = sequelize.define('customer', {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
@@ -57,7 +58,11 @@ export default sequelize.define('customer', {
             customer.updated_at = new Date();  
         },
     },
-}
+},
 );
+
+Customers.belongsTo(Route, { foreignKey: 'routeId' });
+
+export default Customers;
 
 
