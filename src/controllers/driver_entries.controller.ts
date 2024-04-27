@@ -41,7 +41,7 @@ const DriverEntriesController = {
         console.log("Page", page, "Limit", limit)
         try{
             const { id } = req.params;
-            const driverEntries = await DriverEntries.findAll({where: {driver_id: id},include: [{model: Customer, as: 'customer'}], offset: (page - 1) * limit, limit: limit});
+            const driverEntries = await DriverEntries.findAndCountAll({where: {driver_id: id},include: [{model: Customer, as: 'customer'}], offset: (page - 1) * limit, limit: limit});
             logger.info(`Getting the driver history with id ${id}`);
             res.json(driverEntries);
         } catch(error){
