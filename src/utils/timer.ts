@@ -6,7 +6,7 @@ const getStartOfWeek = () => {
     const startOfWeek = now.startOf('week');
     return {
         start: startOfWeek.toISODate(),
-        end: startOfWeek.plus({ days: 6 }).toISODate()
+        end: startOfWeek.plus({ days: 6, hour:23, minute:55 }).toISODate()
     }
 }
 
@@ -15,7 +15,7 @@ function getStartOfMonth() {
     const startOfMonth = now.startOf('month');
     return {
         start: startOfMonth.toISODate(),
-        end: startOfMonth.endOf('month').toISODate()
+        end: startOfMonth.endOf('month').plus({ hour:23, minute:55 }).toISODate()
     }
 }
 
@@ -24,7 +24,7 @@ function getPreviousMonth(){
     const previousMonth = now.minus({ months: 1 }).startOf('month');
     return {
         start: previousMonth.toISODate(),
-        end: previousMonth.endOf('month').toISODate()
+        end: previousMonth.endOf('month').plus({ hour:23, minute:55 }).toISODate()
     }
 }
 
@@ -33,7 +33,7 @@ function getPreviousWeek() {
     const previousWeek = now.minus({ weeks: 1 }).startOf('week');
     return {
         start: previousWeek.toISODate(),
-        end: previousWeek.plus({ days: 6 }).toISODate()
+        end: previousWeek.plus({ days: 6, hour:23, minute:55 }).toISODate()
     }    
 }
 
