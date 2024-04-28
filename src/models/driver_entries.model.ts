@@ -2,7 +2,6 @@ import {sequelize, DataTypes}  from  '../utils/sequelize';
 import customerModel  from './customer.model';
 
 
-
 // Define the DriverEntries model
 const Drivers =  sequelize.define('driver_entries', {
         id: {
@@ -23,6 +22,10 @@ const Drivers =  sequelize.define('driver_entries', {
             allowNull: false,
         },
         bottle_received: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        bottle_tally: { 
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -60,7 +63,6 @@ const Drivers =  sequelize.define('driver_entries', {
                     if (customer) {
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
                         customer.bottle_tally = entry.bottle_tally; 
-                        console.log(customer.bottle_tally, entry.bottle_tally, "Total number of tally")
                         await customer.save();
                     } else {
                         throw new Error(`Customer with id ${entry.customer_id} not found`);
