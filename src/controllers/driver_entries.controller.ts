@@ -74,8 +74,12 @@ const DriverEntriesController = {
         }
         
         const startDate = date.start.split("-");
+        const start = new Date(Number(startDate[0]), Number(startDate[1]) - 1, Number(startDate[2]));
+        start.setHours(23, 59, 59);
         const endDate = date.end.split("-");
-        const driverEntries = await DriverEntries.findAll({where: {customer_id: customer, created_at: {[Op.between]: [startDate, endDate]}}});
+        const end = new Date(Number(endDate[0]), Number(endDate[1]) - 1, Number(endDate[2]));
+        end.setHours(23, 59, 59);
+        const driverEntries = await DriverEntries.findAll({where: {customer_id: customer, created_at: {[Op.between]: [start, end]}}});
         logger.info(`Getting the driver entries with customer id ${customer} and time range ${timerange}`);
         res.json(driverEntries);
     }
