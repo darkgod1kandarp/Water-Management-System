@@ -62,11 +62,11 @@ const Drivers =  sequelize.define('driver_entries', {
                     if (customer) {
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
                         customer.bottle_tally = entry.bottle_tally; 
+                        console.log("Customer", customer.bottle_tally, entry.bottle_tally)
                         await customer.save();
                     } else {
                         throw new Error(`Customer with id ${entry.customer_id} not found`);
                     }
-                    return entry;
                 },
                 beforeUpdate: async (entry:any) => {
                     entry.updated_at = new Date();
