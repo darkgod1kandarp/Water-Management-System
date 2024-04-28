@@ -57,11 +57,10 @@ const Drivers =  sequelize.define('driver_entries', {
     {       
             timestamps: false,
             hooks: {
-                beforeCreate: async (entry:any) => {
+                beforeCreate: async (entry:any, options) => {
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
                     if (customer) {
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
-                        console.log("Bottle Tally", entry.bottle_tally);
                         customer.bottle_tally = entry.bottle_tally; 
                         await customer.save();
                     } else {
