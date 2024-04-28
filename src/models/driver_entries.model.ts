@@ -60,7 +60,16 @@ const Drivers =  sequelize.define('driver_entries', {
                 beforeValidate: async (entry:any, options) => {
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
                     if (customer) {
+                        if (entry.bottle_received < 0 || entry.bottle_delivered < 0) {
+                            throw new Error('Bottle received and bottle delivered cannot be negative');
+                        }
+                        if (entry.bottle_received > customer.bottle_tally) {
+                            throw new Error('Bottle received cannot be greater than bottle tally');
+                        }
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
+                        if (entry.bottle_tally < 0) {
+                            throw new Error('Bottle tally cannot be negative');
+                        }
                         customer.bottle_tally = entry.bottle_tally; 
                         console.log("Customer", customer.bottle_tally, entry.bottle_tally)
                         await customer.save();
