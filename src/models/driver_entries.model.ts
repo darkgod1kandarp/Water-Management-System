@@ -57,7 +57,7 @@ const Drivers =  sequelize.define('driver_entries', {
     {       
             timestamps: false,
             hooks: {
-                beforeCreate: async (entry:any, options) => {
+                beforeValidate: async (entry:any, options) => {
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
                     console.log("Customer", customer)
                     if (customer) {
