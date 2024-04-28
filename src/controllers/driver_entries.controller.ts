@@ -1,8 +1,9 @@
 import DriverEntries  from "../models/driver_entries.model";   
 import getLogger from '../utils/logger';   
-import { Request, Response } from 'express';  
+import e, { Request, Response } from 'express';  
 import { Op } from 'sequelize';   
 import Customer from '../models/customer.model';
+import {getStartOfWeek , getStartOfMonth, getPreviousMonth, getPreviousWeek} from '../utils/timer';
 
 const logger = getLogger();   
 const DriverEntriesController = {  
@@ -50,6 +51,35 @@ const DriverEntriesController = {
             logger.error('Error while getting the driver history');
             return res.sendStatus(500);
         }
+    }, 
+
+    async getDriverEntriesByCustomerAndTimeRange(req: Request, res: Response) {
+        const { customer, timerange } = req.params;
+        if (!timerange) {
+            logger.error('Timerange not provided');
+            return res.sendStatus(400);
+        }
+        let date;
+        if(timerange === 'prevMonth') {
+             date = getPreviousMonth();
+        } else if(timerange === 'prevWeek') {
+            date = getPreviousWeek();
+        }else if(timerange === 'startOfWeek') {
+            date = getStartOfWeek();
+        }else if(timerange === 'startOfMonth') {
+            date = getStartOfMonth();
+        } else {
+            logger.error('Invalid timerange');
+            return res.sendStatus(400);
+        }
+        
+        const startDate = date.start.split("-");
+        const start = new Date(Number(startDate[0]), Number(startDate[1]) - 1, Number(startDate[2]));
+        const endDate = date.end.split("-");
+        const end = new Date(Number(endDate[0]), Number(endDate[1]) - 1, Number(endDate[2]));
+        const driverEntries = await DriverEntries.findAll({where: {customer_id: customer, created_at: {[Op.between]: [start, end]}}});
+        logger.info(`Getting the driver entries with customer id ${customer} and time range ${timerange}`);
+        res.json(driverEntries);
     }
 };
 

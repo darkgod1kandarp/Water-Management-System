@@ -21,4 +21,9 @@ route.get('/history/:id', (req, res) =>{
     DriverEntriesController.getDriverHistory(req, res);
 })
 
+
+route.put("/:customer/:timerange", (req, res) => {   
+    DriverEntriesController.getDriverEntriesByCustomerAndTimeRange(req, res); 
+});
+
 export default route;
