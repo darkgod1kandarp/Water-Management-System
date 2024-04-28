@@ -1,5 +1,5 @@
 
-import { DateTime } from 'luxon';
+const { DateTime } = require('luxon');
 
 const getStartOfWeek = () => {
     const now = DateTime.now();
@@ -37,4 +37,6 @@ function getPreviousWeek() {
     }    
 }
 
-export { getStartOfWeek, getStartOfMonth, getPreviousMonth, getPreviousWeek };
+
+console.log(getStartOfWeek());
+// export { getStartOfWeek, getStartOfMonth, getPreviousMonth, getPreviousWeek };
