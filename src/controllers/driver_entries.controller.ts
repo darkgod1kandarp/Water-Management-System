@@ -75,7 +75,6 @@ const DriverEntriesController = {
         
         const startDate = date.start.split("-");
         const start = new Date(Number(startDate[0]), Number(startDate[1]) - 1, Number(startDate[2]));
-        start.setHours(23, 59, 59);
         const endDate = date.end.split("-");
         const end = new Date(Number(endDate[0]), Number(endDate[1]) - 1, Number(endDate[2]));
         end.setHours(23, 59, 59);
