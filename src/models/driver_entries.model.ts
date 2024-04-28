@@ -58,7 +58,6 @@ const Drivers =  sequelize.define('driver_entries', {
             timestamps: false,
             hooks: {
                 beforeCreate: async (entry:any) => {
-                    console.log("Before Create", entry);
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
                     if (customer) {
                         entry.bottle_tally = Number(customer.bottle_tally) + Number(entry.bottle_delivered) - Number(entry.bottle_received);
