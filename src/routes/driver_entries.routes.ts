@@ -22,7 +22,7 @@ route.get('/history/:id', (req, res) =>{
 })
 
 
-route.put("/:customer/:timerange", (req, res) => {   
+route.get("/:customer/:timerange", (req, res) => {   
     DriverEntriesController.getDriverEntriesByCustomerAndTimeRange(req, res); 
 });
 
