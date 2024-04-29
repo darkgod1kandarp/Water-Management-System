@@ -10,10 +10,19 @@ interface CustomerEntry {
     bottle_tally: number; // Assuming bottle_tally is a number, adjust if necessary
     route_id: string;
     address: string;
+    bottle_delivered: number;
+    bottle_received: number;
 }
 
 interface CustomerBottleTally {
     [customerId: string]: CustomerEntry;
+}
+
+interface CustomerDeliveresAndRecieved {
+    [customerId: string]: {
+        bottle_delivered: number;
+        bottle_received: number;
+    };
 }
 
 
@@ -86,12 +95,17 @@ const DriverEntriesController = {
         
         const customer_bottle_tally:CustomerBottleTally = {};
         const startDate = date.start.split("-");
+        const customerDeliveresAndRecieved: CustomerDeliveresAndRecieved = {};
         const start = new Date(Number(startDate[0]), Number(startDate[1]) - 1, Number(startDate[2]));
         const endDate = date.end.split("-");
         const end = new Date(Number(endDate[0]), Number(endDate[1]) - 1, Number(endDate[2]));
         end.setHours(23, 59, 59);
         const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}]});
         for(const entry of driverEntries){
+            customerDeliveresAndRecieved[entry.customer_id] = {
+                bottle_delivered: entry.bottle_delivered,
+                bottle_received: entry.bottle_received
+            }
             if (customer_bottle_tally[entry.customer_id]) {
                 continue
             }
@@ -99,8 +113,16 @@ const DriverEntriesController = {
                 customer_name: entry.customer.name,
                 bottle_tally: entry.bottle_tally,
                 route_id: entry.customer.route_id,
-                address: entry.customer.address
+                address: entry.customer.address,
+                bottle_delivered: 0,
+                bottle_received: 0
             } 
+        }
+        for (const [customerId, {bottle_delivered, bottle_received}] of Object.entries(customerDeliveresAndRecieved)) {
+            if (customer_bottle_tally[customerId]) {
+                customer_bottle_tally[customerId].bottle_delivered = bottle_delivered;
+                customer_bottle_tally[customerId].bottle_received = bottle_received;
+            }
         }
         logger.info(`Getting the driver entries within time range ${timerange}`);
         res.json(customer_bottle_tally);
