@@ -97,6 +97,23 @@ const UserController = {
             return res.sendStatus(500);
         }
 
+    },
+
+    async deleteUser(req: Request, res: Response) {
+        try{
+            const user = await UserModel.findByPk(req.params.id);
+            if (!user){
+                logger.error(`User with id ${req.params.id} not found`);
+                return res.sendStatus(404);
+            }
+            await user.destroy();
+            logger.info(`Deleting the user with id ${req.params.id}`);
+            return res.sendStatus(204);
+        }
+        catch (error) {
+            logger.error('Error while deleting the user');
+            return res.sendStatus(500);
+        }
     }
 
 };
