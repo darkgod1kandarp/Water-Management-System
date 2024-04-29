@@ -5,12 +5,13 @@ import { Op } from 'sequelize';
 import Customer from '../models/customer.model';
 import {getStartOfWeek , getStartOfMonth, getPreviousMonth, getPreviousWeek} from '../utils/timer';
 
-interface CustomerBottleTally {
+interface CustomerEntry {
+    customer_name: string;
+    bottle_tally: number; // Assuming bottle_tally is a number, adjust if necessary
+}
 
-    [customerId: string]: {
-        customer_name: string;
-        bottle_tally: number; // Assuming bottle_tally is a number, adjust if necessary
-    }[];
+interface CustomerBottleTally {
+    [customerId: string]: CustomerEntry;
 }
 
 
@@ -89,13 +90,10 @@ const DriverEntriesController = {
         end.setHours(23, 59, 59);
         const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}], order: [['created_at', 'ASC']]});
         for(const entry of driverEntries){
-            if (!customer_bottle_tally[entry.customer.id]) {
-                customer_bottle_tally[entry.customer.id] = [];
-            }
-            customer_bottle_tally[entry.customer.id] =[...customer_bottle_tally[entry.customer.id],{
+            customer_bottle_tally[entry.customer.id] = {
                 customer_name: entry.customer.name,
                 bottle_tally: entry.customer.bottle_tally,
-            } ]
+            } 
         }
         logger.info(`Getting the driver entries within time range ${timerange}`);
         res.json(customer_bottle_tally);
