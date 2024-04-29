@@ -25,19 +25,10 @@ const User = sequelize.define('user', {
     isNew: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-    },
+    }
 },
-{   timestamps: false,
+{  
     paranoid: true,
-    deletedAt: 'destroyTime',
     hooks: {
         beforeCreate: async (user:any) => {
             const salt = process.env.SALT || 10;
