@@ -91,9 +91,9 @@ const DriverEntriesController = {
         const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}], order: [['created_at', 'ASC']]});
         for(const entry of driverEntries){
             console.log(entry.customer);
-            customer_bottle_tally[entry.customer.id] = {
+            customer_bottle_tally[entry.customer_id] = {
                 customer_name: entry.customer.name,
-                bottle_tally: entry.customer.bottle_tally,
+                bottle_tally: entry.bottle_tally,
             } 
         }
         logger.info(`Getting the driver entries within time range ${timerange}`);
