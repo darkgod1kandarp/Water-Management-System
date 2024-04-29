@@ -40,7 +40,6 @@ const DriverEntriesController = {
     async getDriverHistory(req: Request, res: Response) {
         const page =  parseInt(req.query.page as string) || 1;   
         const limit = parseInt(req.query.limit as string) || 10;
-        console.log("Page", page, "Limit", limit)
         try{
             const { id } = req.params;
             const driverEntries = await DriverEntries.findAndCountAll({where: {driver_id: id},include: [{model: Customer, as: 'customer'}], offset: (page - 1) * limit, limit: limit});
@@ -73,17 +72,21 @@ const DriverEntriesController = {
             return res.sendStatus(400);
         }
         
+        let customer_botte_tally = {};
         const startDate = date.start.split("-");
         const start = new Date(Number(startDate[0]), Number(startDate[1]) - 1, Number(startDate[2]));
         const endDate = date.end.split("-");
         const end = new Date(Number(endDate[0]), Number(endDate[1]) - 1, Number(endDate[2]));
         end.setHours(23, 59, 59);
-        const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}]});
-        for(const entry of driverEntries) {
-            console.log(entry.customer_id);
+        const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}], order: [['created_at', 'DESC']]});
+        for(const entry of driverEntries){
+            customer_botte_tally[entry.customer.id] =[...customer_botte_tally[entry.customer.id],{
+                customer_name: entry.customer.name,
+                bottle_tally: entry.customer.bottle_tally,
+            } ]
         }
         logger.info(`Getting the driver entries within time range ${timerange}`);
-        res.json(driverEntries);
+        res.json(customer_botte_tally);
     }
 };
 
