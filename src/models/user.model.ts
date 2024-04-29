@@ -36,6 +36,7 @@ const User = sequelize.define('user', {
     },
 },
 {   timestamps: false,
+    paranoid: true,
     hooks: {
         beforeCreate: async (user:any) => {
             const salt = process.env.SALT || 10;
