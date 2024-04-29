@@ -16,6 +16,7 @@ const Drivers =  sequelize.define('driver_entries', {
                 model: 'customers',
                 key: 'id'
             },
+            onDelete: 'CASCADE',
         },
         bottle_delivered: {
             type: DataTypes.INTEGER,
@@ -36,6 +37,7 @@ const Drivers =  sequelize.define('driver_entries', {
                 key: 'id'
             },
             allowNull: false,
+            onDelete: 'CASCADE',
         },
         driver_id: {
             type: DataTypes.UUID,
@@ -44,6 +46,7 @@ const Drivers =  sequelize.define('driver_entries', {
                 key: 'id'
             },
             allowNull: false,
+            onDelete: 'CASCADE',
         },
         created_at: {
             type: DataTypes.DATE,

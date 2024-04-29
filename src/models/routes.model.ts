@@ -41,15 +41,15 @@ const Route = sequelize.define('routes', {
         beforeUpdate: async (route:any) => {
             route.updated_at = new Date();   
         },
-    },
+    }
 }
 );
 
-Route.hasMany(Customer, {
-    onDelete: 'CASCADE',
-});
-Route.hasMany(Driver, {
-    onDelete: 'CASCADE',
-});
+// Route.hasMany(Customer, {
+//     onDelete: 'CASCADE',
+// });
+// Route.hasMany(Driver, {
+//     onDelete: 'CASCADE',
+// });
 
 export default Route;

@@ -23,6 +23,7 @@ const Customers = sequelize.define('customer', {
             key: 'id'
         },
         allowNull: false,
+        onDelete: 'CASCADE',
     },
     bottle_tally: {
         type: DataTypes.INTEGER,
@@ -32,10 +33,6 @@ const Customers = sequelize.define('customer', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    // previous_botlle_tally: {
-    //     type: DataTypes.INTEGER,
-    //     allowNull: false,
-    // },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: new Date(),
@@ -63,7 +60,6 @@ const Customers = sequelize.define('customer', {
 );
 
 Customers.belongsTo(Route, { foreignKey: 'route_id' });
-Customers.hasMany(DriverEntries, { onDelete: 'CASCADE'});   
 export default Customers;
 
 

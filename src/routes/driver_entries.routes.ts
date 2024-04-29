@@ -21,7 +21,6 @@ route.get('/history/:id', (req, res) =>{
     DriverEntriesController.getDriverHistory(req, res);
 })
 
-
 route.get("/timerange/:timerange", (req, res) => {   
     DriverEntriesController.getDriverEntriesByTimeRange(req, res); 
 });

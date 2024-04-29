@@ -51,9 +51,6 @@ const User = sequelize.define('user', {
 }
 );
 
-User.hasMany(DriverEntries, {
-    onDelete: 'CASCADE',
-});
 
 export default User;
 
