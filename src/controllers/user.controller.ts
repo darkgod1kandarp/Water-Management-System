@@ -106,9 +106,7 @@ const UserController = {
                 logger.error(`User with id ${req.params.id} not found`);
                 return res.sendStatus(404);
             }
-            await user.destroy({
-                force: false
-            });
+            await user.destroy();
             logger.info(`Deleting the user with id ${req.params.id}`);
             return res.sendStatus(204);
         }
