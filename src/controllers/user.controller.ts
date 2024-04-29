@@ -83,6 +83,10 @@ const UserController = {
             }
 
             try{
+                if (req.body.password) {
+                    const salt:any = process.env.SALT || 10;
+                    req.body.password = await bcrypt.hash(req.body.password, salt);
+                }
                 await user.update(req.body);
             } catch (error) {
                 logger.error('Error while updating the user');

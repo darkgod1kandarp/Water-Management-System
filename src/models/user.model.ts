@@ -37,10 +37,7 @@ const User = sequelize.define('user', {
             user.password = await bcrypt.hash(user.password, salt);
         },
         beforeUpdate: async (user:any) => {
-            const salt:any = process.env.SALT || 10;
-            user.password = await bcrypt.hash(user.password, salt);
             user.updated_at = new Date();
-            user.isNew = false;
         },
     },
 }
