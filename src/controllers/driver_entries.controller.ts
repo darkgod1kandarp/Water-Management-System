@@ -88,7 +88,7 @@ const DriverEntriesController = {
         const endDate = date.end.split("-");
         const end = new Date(Number(endDate[0]), Number(endDate[1]) - 1, Number(endDate[2]));
         end.setHours(23, 59, 59);
-        const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}], order: [['created_at', 'ASC']]});
+        const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}]});
         for(const entry of driverEntries){
             console.log(entry.customer);
             customer_bottle_tally[entry.customer_id] = {
