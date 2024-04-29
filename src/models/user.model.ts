@@ -1,10 +1,10 @@
 import {sequelize, DataTypes, Sequelize}  from  '../utils/sequelize';  
 import bcrypt from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
+import DriverEntries from './driver_entries.model';
 
 
 // Define the User(aka driver) model
-export default sequelize.define('user', {
+const User = sequelize.define('user', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -50,5 +50,13 @@ export default sequelize.define('user', {
     },
 }
 );
+
+User.hasMany(DriverEntries, {
+    onDelete: 'CASCADE',
+});
+
+export default User;
+
+
 
 

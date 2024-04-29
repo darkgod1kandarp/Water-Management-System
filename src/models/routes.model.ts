@@ -2,11 +2,13 @@ import { Router } from 'express';
 import {sequelize, DataTypes, Sequelize}  from  '../utils/sequelize';  
 import { v4 as uuidv4 } from 'uuid';
 import getLogger from '../utils/logger';
+import Customer from './customer.model';    
+import Driver from './driver_entries.model';
   
 const logger = getLogger();
 
 // Define the Routes model  
-export default sequelize.define('routes', {
+const Route = sequelize.define('routes', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -42,3 +44,12 @@ export default sequelize.define('routes', {
     },
 }
 );
+
+Route.hasMany(Customer, {
+    onDelete: 'CASCADE',
+});
+Route.hasMany(Driver, {
+    onDelete: 'CASCADE',
+});
+
+export default Route;

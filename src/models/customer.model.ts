@@ -1,6 +1,7 @@
 import {sequelize, DataTypes, Sequelize}  from  '../utils/sequelize';  
 import getLogger from '../utils/logger';
 import Route from './routes.model';
+import DriverEntries from './driver_entries.model';
 
 const logger = getLogger();
 
@@ -62,7 +63,7 @@ const Customers = sequelize.define('customer', {
 );
 
 Customers.belongsTo(Route, { foreignKey: 'route_id' });
-
+Customers.hasMany(DriverEntries, { onDelete: 'CASCADE'});   
 export default Customers;
 
 
