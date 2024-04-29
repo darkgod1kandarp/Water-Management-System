@@ -90,7 +90,9 @@ const DriverEntriesController = {
         end.setHours(23, 59, 59);
         const driverEntries = await DriverEntries.findAll({where:{created_at: {[Op.between]: [start, end]}},include: [{model: Customer, as: 'customer'}]});
         for(const entry of driverEntries){
-            console.log(entry.customer);
+            if (customer_bottle_tally[entry.customer_id]) {
+                continue
+            }
             customer_bottle_tally[entry.customer_id] = {
                 customer_name: entry.customer.name,
                 bottle_tally: entry.bottle_tally,
