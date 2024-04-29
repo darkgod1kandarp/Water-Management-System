@@ -8,6 +8,8 @@ import {getStartOfWeek , getStartOfMonth, getPreviousMonth, getPreviousWeek} fro
 interface CustomerEntry {
     customer_name: string;
     bottle_tally: number; // Assuming bottle_tally is a number, adjust if necessary
+    route_id: string;
+    address: string;
 }
 
 interface CustomerBottleTally {
@@ -96,6 +98,8 @@ const DriverEntriesController = {
             customer_bottle_tally[entry.customer_id] = {
                 customer_name: entry.customer.name,
                 bottle_tally: entry.bottle_tally,
+                route_id: entry.customer.route_id,
+                address: entry.customer.address
             } 
         }
         logger.info(`Getting the driver entries within time range ${timerange}`);
