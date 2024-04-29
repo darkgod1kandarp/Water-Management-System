@@ -32,6 +32,8 @@ const User = sequelize.define('user', {
     hooks: {
         beforeCreate: async (user:any) => {
             const salt = process.env.SALT || 10;
+            user.created_at = new Date();
+            user.updated_at = new Date();
             user.password = await bcrypt.hash(user.password, salt);
         },
         beforeUpdate: async (user:any) => {
