@@ -111,6 +111,7 @@ const UserController = {
             return res.sendStatus(204);
         }
         catch (error) {
+            console.log(error);
             logger.error('Error while deleting the user');
             return res.sendStatus(500);
         }
