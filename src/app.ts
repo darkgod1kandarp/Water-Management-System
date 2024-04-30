@@ -29,6 +29,7 @@ sequelize.sync()
         logger.info('Database is connected');
     })
     .catch((err) => {
+        console.log(err);
         logger.error(err);
 });
 
@@ -37,6 +38,7 @@ sequelize.sync()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(Logger);
+app.use('/uploads', express.static('uploads'));
 
 // Initializing the global variables 
 const port = process.env.PORT || 3000;     
