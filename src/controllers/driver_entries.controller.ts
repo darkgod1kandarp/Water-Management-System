@@ -145,7 +145,7 @@ const DriverEntriesController = {
             const report = await generateReport(timerange as string);
             res.json(report);
         }
-        catch (error : any) {
+        catch (error) {
             console.log(error);
             logger.error('Error while generating report');
             if (error.message === 'Timerange not provided' || error.message === 'Invalid timerange') { 
@@ -176,7 +176,7 @@ const DriverEntriesController = {
             await jsonToExcel(report);    
             res.json(report);
         }
-        catch (error : any) {
+        catch (error) {
             console.log(error);
             logger.error('Error while generating report');
             if (error!.message === 'Timerange not provided' || error!.message === 'Invalid timerange') {
