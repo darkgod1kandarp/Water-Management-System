@@ -33,7 +33,7 @@ const generateReport = async (timerange: string) => {
     const endDate = date.end.split("-");
     const end = new Date(Number(endDate[ 0 ]), Number(endDate[ 1 ]) - 1, Number(endDate[ 2 ]));
     end.setHours(23, 59, 59);
-    const driverEntries = await DriverEntries.findAll({ where: { created_at: { [ Op.between ]: [ start, end ] } }, include: [ { model: Customer, as: 'customer' } ] });
+    const driverEntries = await DriverEntries.findAll({ where: { createdAt : { [ Op.between ]: [ start, end ] } }, include: [ { model: Customer, as: 'customer' } ] });
     for (const entry of driverEntries) {
         if (customerDeliveresAndRecieved[ entry.customer_id ]) {
             customerDeliveresAndRecieved[ entry.customer_id ].bottle_delivered += entry.bottle_delivered;

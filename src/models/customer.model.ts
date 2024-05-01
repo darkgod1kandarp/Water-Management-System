@@ -44,9 +44,6 @@ const Customers = sequelize.define('customer', {
                 throw new Error(`Customer with name ${customer.name} already exists`);
             }
         },
-        beforeUpdate: async (customer:any) => {
-            customer.updated_at = new Date();  
-        },
     },
 },
 );
