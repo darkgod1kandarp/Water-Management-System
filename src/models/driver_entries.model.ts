@@ -47,18 +47,10 @@ const Drivers =  sequelize.define('driver_entries', {
             },
             allowNull: false,
             onDelete: 'CASCADE',
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            defaultValue: new Date(),
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            defaultValue: new Date(),
-        },
+        }
     },
     {       
-            timestamps: false,
+            paranoid: true,
             hooks: {
                 beforeValidate: async (entry:any, options) => {
                     const customer:any =  await customerModel.findOne({where: {id: entry.customer_id}})  
@@ -79,10 +71,7 @@ const Drivers =  sequelize.define('driver_entries', {
                     } else {
                         throw new Error(`Customer with id ${entry.customer_id} not found`);
                     }
-                },
-                beforeUpdate: async (entry:any) => {
-                    entry.updated_at = new Date();
-                },
+                }
             },
         }
     )

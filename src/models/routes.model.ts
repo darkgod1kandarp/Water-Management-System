@@ -18,18 +18,10 @@ const Route = sequelize.define('routes', {
     route_name: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-    },
+    }
 },
 {
-    timestamps: false,
+    paranoid: true,
     hooks: {
         beforeCreate: async (route:any) => {
             const existingRoute = await sequelize.models.routes.findOne({where: {route_name: route.route_name}});  
@@ -37,10 +29,7 @@ const Route = sequelize.define('routes', {
                 logger.error(`Route with name ${route.route_name} already exists`);
                 throw new Error(`Route with name ${route.route_name} already exists`);
             }
-        },
-        beforeUpdate: async (route:any) => {
-            route.updated_at = new Date();   
-        },
+        }
     }
 }
 );

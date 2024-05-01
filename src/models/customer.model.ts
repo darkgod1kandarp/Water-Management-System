@@ -32,18 +32,10 @@ const Customers = sequelize.define('customer', {
     address: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-    },
+    }
 },
 {  
-    timestamps: false,
+    paranoid: true,
     hooks: {
         beforeCreate: async (customer:any) => {
             const existingCustomer = await sequelize.models.customer.findOne({where: {name: customer.name}});  

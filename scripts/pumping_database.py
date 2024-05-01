@@ -28,7 +28,7 @@ def db_connection(test_env:str):
 def filling_user_table(cursor, connection):     
     name =  generate_slug(2)
     salt =  "$2a$10$Ur4McDr64HYDC1SL5XKpSu"
-    password = bcrypt.hashpw('user_password'.encode('utf-8'),salt=salt.encode('utf-8'))
+    password = bcrypt.hashpw('user_password'.encode('utf-8'),salt=salt.encode('utf-8')).decode('utf-8')
     while not existing_name.get(name):
         name = generate_slug(2)
         existing_name[name] = True
@@ -41,7 +41,7 @@ def filling_route_table(cursor, connection):
     while not existing_name.get(name):
         name = generate_slug(3)
         existing_name[name] = True   
-    cursor.execute('INSERT INTO routes (route_name, "created_at", "updated_at") VALUES (%s, %s, %s);', (name, datetime.now(), datetime.now()))
+    cursor.execute('INSERT INTO routes (route_name, "createdAt", "updatedAt") VALUES (%s, %s, %s);', (name, datetime.now(), datetime.now()))
     connection.commit()   
 
 def filling_customer_table(cursor, connection):
@@ -53,11 +53,11 @@ def filling_customer_table(cursor, connection):
     cursor.execute('SELECT id FROM routes')
     routes = cursor.fetchall()
     route_id = random.choice(routes)[0]
-    cursor.execute('INSERT INTO customers (name, route_id, bottle_tally, address, "created_at", "updated_at") VALUES (%s, %s, %s, %s, %s, %s);', (name, route_id, 1, address, datetime.now(), datetime.now()))
+    cursor.execute('INSERT INTO customers (name, route_id, bottle_tally, address, "createdAt", "updatedAt") VALUES (%s, %s, %s, %s, %s, %s);', (name, route_id, 1, address, datetime.now(), datetime.now()))
     connection.commit()
 
 def filling_truck_table(cursor, connection):
-    cursor.execute('INSERT INTO trucks (truck_no, "created_at", "updated_at") VALUES (%s, %s, %s);', (generate_slug(3), datetime.now(), datetime.now()))
+    cursor.execute('INSERT INTO trucks (truck_no, "createdAt", "updatedAt") VALUES (%s, %s, %s);', (generate_slug(3), datetime.now(), datetime.now()))
     connection.commit()
     
 def filling_driver_entries(cursor, connection):
@@ -70,8 +70,8 @@ def filling_driver_entries(cursor, connection):
     cursor.execute('SELECT id FROM users WHERE "isAdmin" = False')
     drivers = cursor.fetchall()
     driver_id = random.choice(drivers)[0]
-    created_at = datetime.now() - timedelta(days=random.randint(1, 365))
-    cursor.execute('INSERT INTO driver_entries (customer_id, bottle_delivered, bottle_received, bottle_tally, truck_no, driver_id, "created_at", "updated_at") VALUES (%s, %s, %s, %s, %s, %s, %s, %s);', (customer_id, 1, 1, 1, truck_id, driver_id, created_at, created_at))
+    createdAt = datetime.now() - timedelta(days=random.randint(1, 365))
+    cursor.execute('INSERT INTO driver_entries (customer_id, bottle_delivered, bottle_received, bottle_tally, truck_no, driver_id, "createdAt", "updatedAt") VALUES (%s, %s, %s, %s, %s, %s, %s, %s);', (customer_id, 1, 1, 1, truck_id, driver_id, createdAt, createdAt))
     connection.commit()
 
 
