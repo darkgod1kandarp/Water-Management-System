@@ -17,7 +17,7 @@ const  CustomerController = {
         
         const page =  parseInt(req.query.page as string) || 1;   
         const limit = parseInt(req.query.limit as string) || 10;
-        const customers = await Customer.findAll({include: Routes, offset: (page - 1) * limit, limit: limit});
+        const customers = await Customer.findAll({include: [{model:Routes, as:'route'}], offset: (page - 1) * limit, limit: limit});
         logger.info('Getting all the customers');
         res.json(customers);
     },
