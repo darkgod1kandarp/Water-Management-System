@@ -3,37 +3,17 @@ import getLogger from '../utils/logger';
 import  { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import Customer from '../models/customer.model';
-import { getStartOfWeek, getStartOfMonth, getPreviousMonth, getPreviousWeek } from '../utils/timer';
 import jsonToExcel from "../Services/Excel";
+import Route from "../models/routes.model";
 
-const generateReport = async (timerange: string) => {
-    if (!timerange) {
-        logger.error('Timerange not provided');
-        throw new Error('Timerange not provided');
-    }
 
-    let date;
-    if (timerange === 'prevMonth') {
-        date = getPreviousMonth();
-    } else if (timerange === 'prevWeek') {
-        date = getPreviousWeek();
-    } else if (timerange === 'startOfWeek') {
-        date = getStartOfWeek();
-    } else if (timerange === 'startOfMonth') {
-        date = getStartOfMonth();
-    } else {
-        logger.error('Invalid timerange');
-        throw new Error('Invalid timerange');
-    }
+const generateReport = async (startDate:String, endDate:String) => {
 
     const customer_bottle_tally: CustomerBottleTally = {};
-    const startDate = date.start.split("-");
     const customerDeliveresAndRecieved: CustomerDeliveresAndRecieved = {};
-    const start = new Date(Number(startDate[ 0 ]), Number(startDate[ 1 ]) - 1, Number(startDate[ 2 ]));
-    const endDate = date.end.split("-");
-    const end = new Date(Number(endDate[ 0 ]), Number(endDate[ 1 ]) - 1, Number(endDate[ 2 ]));
-    end.setHours(23, 59, 59);
-    const driverEntries = await DriverEntries.findAll({ where: { createdAt : { [ Op.between ]: [ start, end ] } }, include: [ { model: Customer, as: 'customer' } ] });
+    const start = new Date(Number(startDate.split('-')[0]), Number(startDate.split('-')[1]) - 1, Number(startDate.split('-')[2])).setUTCHours(0, 0, 0);
+    const end = new Date(Number(endDate.split('-')[0]), Number(endDate.split('-')[1]) - 1, Number(endDate.split('-')[2])).setUTCHours(23, 59, 59);
+    const driverEntries = await DriverEntries.findAll({ where: { createdAt : { [ Op.between ]: [ start, end ] } }, include: [ { model: Customer, as: 'customer', include: [{model:Route,  as: 'route'}] } ] });
     for (const entry of driverEntries) {
         if (customerDeliveresAndRecieved[ entry.customer_id ]) {
             customerDeliveresAndRecieved[ entry.customer_id ].bottle_delivered += entry.bottle_delivered;
@@ -50,7 +30,7 @@ const generateReport = async (timerange: string) => {
         customer_bottle_tally[ entry.customer_id ] = {
             customer_name: entry.customer.name,
             bottle_tally: entry.bottle_tally,
-            route_id: entry.customer.route_id,
+            route: entry.customer.route.route_name,
             address: entry.customer.address,
             bottle_delivered: 0,
             bottle_received: 0
@@ -69,7 +49,7 @@ const generateReport = async (timerange: string) => {
 interface CustomerEntry {
     customer_name: string;
     bottle_tally: number; // Assuming bottle_tally is a number, adjust if necessary
-    route_id: string;
+    route: string;
     address: string;
     bottle_delivered: number;
     bottle_received: number;
@@ -84,6 +64,11 @@ interface CustomerDeliveresAndRecieved {
         bottle_delivered: number;
         bottle_received: number;
     };
+}
+
+interface Date {
+    start: string;
+    end: string;
 }
 
 
@@ -124,7 +109,7 @@ const DriverEntriesController = {
         const limit = parseInt(req.query.limit as string) || 10;
         try {
             const { id } = req.params;
-            const driverEntries = await DriverEntries.findAndCountAll({ where: { driver_id: id }, include: [ { model: Customer, as: 'customer' } ], offset: (page - 1) * limit, limit: limit });
+            const driverEntries = await DriverEntries.findAndCountAll({ where: { driver_id: id }, include: [ { model: Customer, as: 'customer',include: [{model:Route,  as: 'route'}] } ], offset: (page - 1) * limit, limit: limit });
             logger.info(`Getting the driver history with id ${id}`);
             res.json(driverEntries);
         } catch (error) {
@@ -134,47 +119,79 @@ const DriverEntriesController = {
         }
     },
 
-    async getDriverEntriesByTimeRange(req: Request, res: Response) {
+    // async getDriverEntriesByTimeRange(req: Request, res: Response) {
 
-        const { timerange } = req.query;
-        if (!timerange) {
-            logger.error('Timerange not provided');
+    //     const { timerange } = req.query;
+    //     if (!timerange) {
+    //         logger.error('Timerange not provided');
+    //         return res.sendStatus(400);
+    //     }
+
+    //     let date:Date;
+    //     if (timerange === 'prevMonth') {
+    //         date = getPreviousMonth();
+    //     } else if (timerange === 'prevWeek') {
+    //         date = getPreviousWeek();
+    //     } else if (timerange === 'startOfWeek') {
+    //         date = getStartOfWeek();
+    //     } else if (timerange === 'startOfMonth') {
+    //         date = getStartOfMonth();
+    //         console.log(date);
+    //     } else {
+    //         logger.error('Invalid timerange');
+    //         throw new Error('Invalid timerange');
+    //     }
+    //     try {
+    //         const report = await generateReport(date.start, date.end);
+    //         res.json(report);
+    //     }
+    //     catch (error:any) {
+    //         logger.error('Error while generating report');
+    //         if (error.message === 'Timerange not provided' || error.message === 'Invalid timerange') { 
+    //             return res.sendStatus(400);
+    //         }
+    //         return res.sendStatus(500);
+    //     }
+    // },
+
+    async getDriverEntriesByTimePeriod(req: Request, res: Response) {
+       
+        let {start, end} = req.query as {start: string, end: string};
+        console.log(start, end);
+        if (!start || !end) {
+            logger.error('Start or end date not provided');
             return res.sendStatus(400);
         }
         try {
-            const report = await generateReport(timerange as string);
-            res.json(report);
-        }
-        catch (error:any) {
+            const driverEntries = await generateReport(start, end);
+            logger.info('Getting all the driver entries by time period');
+            res.json(driverEntries);
+        } catch (error) {
             console.log(error);
-            logger.error('Error while generating report');
-            if (error.message === 'Timerange not provided' || error.message === 'Invalid timerange') { 
-                return res.sendStatus(400);
-            }
+            logger.error('Error while getting the driver entries by time period');
             return res.sendStatus(500);
         }
     },
 
-    async generateExcel(req: Request, res: Response) {
-        const { timerange } = req.query;
-        if (!timerange) {
-            logger.error('Timerange not provided');
-            return res.sendStatus(400);
-        }
 
+    async generateExcel(req: Request, res: Response) {
+        let {start, end} = req.query as {start: string, end: string};
+        const host_url = `${req.protocol}://${req.get('host')}`;
         try {
-            const report = Object.values(await generateReport(timerange as string)).map(customer => {
+            const report = Object.values(await generateReport(start, end)).map(customer => {
                 return {
                     'Customer Name': customer.customer_name,
                     'Bottle Tally': customer.bottle_tally,
-                    'Route': customer.route_id,
+                    'Route': customer.route,
                     'Address': customer.address,
                     'Bottle Delivered': customer.bottle_delivered,
                     'Bottle Received': customer.bottle_received
                 }
             });
-            await jsonToExcel(report);    
-            res.json(report);
+
+            console.log(report);
+            const fileUrl = await jsonToExcel(report);    
+            res.json({ fileUrl: `${host_url}/${fileUrl}` });
         }
         catch (error:any) {
             logger.error('Error while generating report');

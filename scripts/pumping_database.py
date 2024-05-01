@@ -70,7 +70,7 @@ def filling_driver_entries(cursor, connection):
     cursor.execute('SELECT id FROM users WHERE "isAdmin" = False')
     drivers = cursor.fetchall()
     driver_id = random.choice(drivers)[0]
-    createdAt = datetime.now() - timedelta(days=random.randint(1, 365))
+    createdAt = datetime.now() - timedelta(days=random.randint(1, 30))
     cursor.execute('INSERT INTO driver_entries (customer_id, bottle_delivered, bottle_received, bottle_tally, truck_no, driver_id, "createdAt", "updatedAt") VALUES (%s, %s, %s, %s, %s, %s, %s, %s);', (customer_id, 1, 1, 1, truck_id, driver_id, createdAt, createdAt))
     connection.commit()
 

@@ -22,10 +22,9 @@ const jsonToExcel = async (data: CustomerRow[])  => {
     ];
 
     sheet.addRows(data);
-
-    await workbook.xlsx.writeFile('uploads/customer-data.xlsx');
-
-    return 'uploads/customer-data.xlsx';
+    const filename =   `customer-data-${new Date().getTime()}.xlsx`;
+    await workbook.xlsx.writeFile(`uploads/${filename}`);
+    return `uploads/${filename}`
 
 }
 
