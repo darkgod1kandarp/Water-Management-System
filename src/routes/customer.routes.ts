@@ -6,7 +6,7 @@ import userCriteria from '../middleware/usercriteria.middleware';
 // Defining the router   
 const router =Router();      
 
-router.get('/',userCriteria,(req, res) => {
+router.get('/',(req, res) => {
     CustomerController.getCustomers(req, res);
 });
 
