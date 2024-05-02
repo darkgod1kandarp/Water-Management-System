@@ -2,6 +2,7 @@ import Routes from '../models/routes.model';
 import e, { Request, Response } from 'express';   
 import { Op } from 'sequelize';   
 import getLogger from '../utils/logger';
+import Customers from '../models/customer.model';
 
 const logger = getLogger();
 
@@ -51,10 +52,15 @@ const  RoutesController = {
         return res.json(route);
     },
 
-    // Delete the route details
+    // Delete the route details   
     async deleteRoute(req: Request, res: Response){
         const { id } = req.params;
         const route = await Routes.findByPk(id);
+        const customerExists = await Customers.findOne({where: {route_id: id}});
+        if (customerExists){
+            logger.error(`Route with id ${id} cannot be deleted as it is associated with a customer`);
+            return res.status(400).json({error: 'Route cannot be deleted as it is associated with a customer'});
+        }
         if (!route){
             logger.error(`Route with id ${id} not found`);
             return res.sendStatus(404);
