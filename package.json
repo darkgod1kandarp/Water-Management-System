@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:prod" : "tsc && node dist/app.js",
+    "build" : "tsc",
     "start:dev": "nodemon src/app.ts", 
-    "poststart:pod": "pm2 restart app"
+    "restart:prod":"pm2 restart app",
+    "prerestart:prod": "npm run build",
+    "start:prod": "pm2 start app",
+    "new:prod":"pm2 start dist/app.js --name app"
   },
   "keywords": [],
   "author": "",
