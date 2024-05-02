@@ -52,7 +52,7 @@ const  RoutesController = {
         return res.json(route);
     },
 
-    // Delete the route details
+    // Delete the route details   
     async deleteRoute(req: Request, res: Response){
         const { id } = req.params;
         const route = await Routes.findByPk(id);
