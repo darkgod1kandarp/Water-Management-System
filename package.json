@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:prod" : "tsc && node dist/index.js",
-    "start:dev": "nodemon src/index.ts", 
+    "start:prod" : "tsc && node dist/app.js",
+    "start:dev": "nodemon src/app.ts", 
     "poststart:pod": "pm2 restart app"
   },
   "keywords": [],
