@@ -100,7 +100,7 @@ const DriverEntriesController = {
         } catch (error) {
             console.log(error);
             logger.error('Error while creating a new driver entry');
-            return res.sendStatus(500);
+            return res.send(500).json({ error });
         }
     },
 
