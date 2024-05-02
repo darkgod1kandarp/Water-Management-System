@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "dev": "nodemon app.js"
+    "build" : "tsc",
+    "start:dev": "nodemon src/app.ts", 
+    "restart:prod":"pm2 restart app",
+    "prerestart:prod": "npm run build",
+    "start:prod": "pm2 start app",
+    "new:prod":"pm2 start dist/app.js --name app"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +28,7 @@
     "pg": "^8.11.5",
     "sequelize": "^6.37.2",
     "sqlite3": "^5.1.7",
+    "typescript": "^5.4.5",
     "uuid": "^9.0.1",
     "winston": "^3.13.0",
     "xlsx": "^0.18.5"
