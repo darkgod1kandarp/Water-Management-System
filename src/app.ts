@@ -20,6 +20,9 @@ import truck from './routes/trucks.routes';
 import user from './routes/user.routes';
 import customerRoutes from './routes/customer.routes';
 import driverEntries from './routes/driver_entries.routes';
+import { send } from 'process';
+import { SendEmail, templates } from './Services/SendEmail';
+import CronJob from './Services/CronJob';
 
 // Syncing up the module    
 // Avoid this method for syncing up the databse as it will delete all table and then it will recreate the table again so data will be lost
@@ -32,6 +35,8 @@ sequelize.sync()
         console.log(err);
         logger.error(err);
 });
+
+const cron = new CronJob();
 
 
 // Added middleware to the app

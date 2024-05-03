@@ -7,7 +7,7 @@ import jsonToExcel from "../Services/Excel";
 import Route from "../models/routes.model";
 
 
-const generateReport = async (startDate:String, endDate:String) => {
+export const generateReport = async (startDate:String, endDate:String) => {
 
     const customer_bottle_tally: CustomerBottleTally = {};
     const customerDeliveresAndRecieved: CustomerDeliveresAndRecieved = {};
