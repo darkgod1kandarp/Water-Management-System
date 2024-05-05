@@ -15,7 +15,7 @@ const UserController = {
             logger.error('Unauthorized access');
             return res.send({ message: 'Unauthorized access' }).status(403);
         }
-        const users = await UserModel.findAll();
+        const users = await UserModel.findAll({order:[['createdAt','DESC']]});
         logger.info('Getting all the users');
         res.json(users);
     },   

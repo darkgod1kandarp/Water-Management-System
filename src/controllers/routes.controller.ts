@@ -10,7 +10,7 @@ const  RoutesController = {
 
     // Get all the routes
     async getRoutes(req: Request, res: Response) {
-        const routes = await Routes.findAll();
+        const routes = await Routes.findAll({order:[['createdAt','DESC']]});
         logger.info('Getting all the routes');
         return res.json(routes);
     },

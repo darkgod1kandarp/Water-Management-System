@@ -13,7 +13,7 @@ const TruckController = {
 
     // Get all the trucks 
     async getTrucks(req: Request, res: Response) {
-        const trucks = await Truck.findAll();
+        const trucks = await Truck.findAll({order:[['createdAt','DESC']]});
         logger.info('Getting all the trucks');
         return res.json(trucks);
     },
