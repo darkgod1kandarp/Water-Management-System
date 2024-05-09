@@ -105,7 +105,7 @@ const  CustomerController = {
         const { name } = req.params;
         // It will find like name wise query on the customer table    
         const customer = await Customer.findAll({
-            
+            include: [{model:Routes, as:'route'}],
             where: {
                 // Represents th op.like query  here op.Like stands for operation like
                 name: {
@@ -123,7 +123,7 @@ const  CustomerController = {
         const route = await Routes.findByPk(id);  
         if (!route) return res.sendStatus(404);   
         const customers = await Customer.findAll({
-            include: [{model:Routes, as:'route'}],
+            
             where: {
                 route_id: route.id
             }
