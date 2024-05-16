@@ -6,7 +6,7 @@ const logger = getLogger();
 
 type UserInterface= {
   id: number;
-  isAdmin: boolean;
+  role: string;
 }
 
 // Verify the token

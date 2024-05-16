@@ -36,7 +36,8 @@ const TruckController = {
             const truck = await Truck.create(req.body);
             logger.info('Creating a new truck');
             res.json(truck);
-        } catch (error:any) {
+        } catch (error: any) {
+            console.log(error);
             logger.error('Error while creating a new truck');
             return res.status(500).json({error: error.message});
         }

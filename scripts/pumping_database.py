@@ -32,8 +32,8 @@ def filling_user_table(cursor, connection):
     while not existing_name.get(name):
         name = generate_slug(2)
         existing_name[name] = True
-    isTrue =  random.choice([True, False])
-    cursor.execute('INSERT INTO users (username, password, "isAdmin", "isNew", "createdAt", "updatedAt") VALUES (%s, %s, %s, %s, %s, %s);', (name, password, isTrue, True,datetime.now(), datetime.now()))
+    role =  random.choice(['driver','admin','sales'])
+    cursor.execute('INSERT INTO users (username, password, "role", "isNew", "createdAt", "updatedAt") VALUES (%s, %s, %s, %s, %s, %s);', (name, password, role, True,datetime.now(), datetime.now()))
     connection.commit()
 
 def filling_route_table(cursor, connection):
@@ -67,7 +67,7 @@ def filling_driver_entries(cursor, connection):
     cursor.execute('SELECT id FROM trucks')
     trucks = cursor.fetchall()
     truck_id = random.choice(trucks)[0]
-    cursor.execute('SELECT id FROM users WHERE "isAdmin" = False')
+    cursor.execute('SELECT id FROM users WHERE "role" = %s', ('driver',) )
     drivers = cursor.fetchall()
     driver_id = random.choice(drivers)[0]
     createdAt = datetime.now() - timedelta(days=random.randint(1, 30))

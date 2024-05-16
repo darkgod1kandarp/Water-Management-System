@@ -11,7 +11,7 @@ const UserController = {
 
     // Get all the users  
     async getUsers(req: Request, res: Response) {
-        if (res.locals.user.isAdmin === false) {
+        if (res.locals.user.role === 'driver') {
             logger.error('Unauthorized access');
             return res.send({ message: 'Unauthorized access' }).status(403);
         }
@@ -37,7 +37,7 @@ const UserController = {
             logger.error('Invalid credentials');
             return res.sendStatus(401);
         }
-        const token  = generateToken(user.id, user.isAdmin);
+        const token  = generateToken(user.id, user.role);
         res.json({ token ,  user });
     },
 
@@ -94,7 +94,7 @@ const UserController = {
             }
 
             logger.info(`Updating the user with id ${req.params.id}`);
-            return res.json({ user , token: generateToken(user.id, user.isAdmin) }).status(200)
+            return res.json({ user , token: generateToken(user.id, user.role) }).status(200)
         }
         catch (error) {
             logger.error('Error while updating the user');
