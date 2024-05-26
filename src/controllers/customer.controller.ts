@@ -103,14 +103,19 @@ const  CustomerController = {
     // Search for a customer by name  while creating table using customer 
     async searchCustomer(req: Request, res: Response) {  
         const { name } = req.params;
+        const {page = 1, limit = 10} = req.query;
         // It will find like name wise query on the customer table    
         const customer = await Customer.findAll({
-            include: [{model:Routes, as:'route'}],
+            include: [ { model: Routes, as: 'route' } ],
+            offset: (parseInt(page as string) - 1) * parseInt(limit as string),
+            limit: parseInt(limit as string),
+            
             where: {
                 // Represents th op.like query  here op.Like stands for operation like
                 name: {
                     [Op.like]: `%${name}%`
-                }
+                },
+                
             },
         });
         res.json(customer);
