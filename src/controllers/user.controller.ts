@@ -16,7 +16,8 @@ const UserController = {
 		if (res.locals.user.role === 'driver') {
 			logger.error('Unauthorized access');
 			return res.send({ message: 'Unauthorized access' }).status(403);
-		}
+        }
+
 		const users = await UserModel.findAll({
 			order: [['createdAt', 'DESC']],
 			offset: (page - 1) * limit,

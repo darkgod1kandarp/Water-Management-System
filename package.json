@@ -9,7 +9,8 @@
     "restart:prod": "pm2 restart app",
     "prerestart:prod": "npm run build",
     "start:prod": "pm2 start app",
-    "new:prod": "pm2 start dist/app.js --name app"
+    "new:prod": "pm2 start dist/app.js --name app",
+    "prenew:prod": "npm run build"
   },
   "keywords": [],
   "author": "",

@@ -4,17 +4,15 @@ import { Router } from 'express';
 // Defining the router
 const route = Router();
 
-route.get("/timerange", (req, res) => {
-    DriverEntriesController.getDriverEntriesByTimePeriod(req, res);
+route.get("/cumulative", (req, res) => {
+    DriverEntriesController.getCumulativeEntries(req, res);
 });
 
-// route.get("/timerange", (req, res) => {
-//     DriverEntriesController.getDriverEntriesByTimeRange(req, res);
-// });
 
-route.get("/report", (req, res) =>{
-    DriverEntriesController.generateExcel(req, res);
+route.get("/export/cumulative", (req, res) =>{
+    DriverEntriesController.generateCumulativeExcel(req, res);
 });
+
 
 route.get("/", (req, res) => {
     DriverEntriesController.getDriverEntries(req, res);
