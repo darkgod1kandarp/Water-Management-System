@@ -131,6 +131,10 @@ const UserController = {
 			return res.sendStatus(500);
 		}
 	},
+
+	async getProfile(req: Request, res: Response) { 
+		res.json(res.locals.user);
+	}
 };
 
 export default UserController;

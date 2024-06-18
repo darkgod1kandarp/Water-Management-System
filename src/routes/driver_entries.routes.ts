@@ -13,6 +13,10 @@ route.get("/export/cumulative", (req, res) =>{
     DriverEntriesController.generateCumulativeExcel(req, res);
 });
 
+route.get("/export/individual", (req, res) => { 
+    DriverEntriesController.generateIndividualExcel(req, res);
+});
+
 
 route.get("/", (req, res) => {
     DriverEntriesController.getDriverEntries(req, res);
