@@ -1,5 +1,5 @@
 import Cron from 'node-cron';
-import { generateReport } from '../controllers/driver_entries.controller';
+import { generateReport } from '../utils/driver';
 import { DateTime } from 'luxon';
 import jsonToExcel from './Excel';
 import { readFile, readFileSync } from 'fs';

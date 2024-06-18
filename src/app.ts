@@ -36,7 +36,6 @@ sequelize.sync()
         logger.error(err);
 });
 
-const cron = new CronJob();
 
 
 // Added middleware to the app
