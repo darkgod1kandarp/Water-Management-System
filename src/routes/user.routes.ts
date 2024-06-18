@@ -1,6 +1,7 @@
 import UserController from "../controllers/user.controller"; 
 import userCriteria from "../middleware/usercriteria.middleware";
 import { Router } from 'express'; 
+import verifyToken from "../middleware/verifytoken.middleware";
 
 const router = Router();   
 
@@ -10,6 +11,6 @@ router.post('/login', UserController.login);
 router.post('/',userCriteria, UserController.createUser);
 router.put('/:id', UserController.updateUser);
 router.delete('/:id', UserController.deleteUser);
-router.get('/profile',userCriteria, UserController.getProfile);
+router.get('/profile',verifyToken, UserController.getProfile);
 
 export default router;
