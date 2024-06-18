@@ -6,11 +6,11 @@ import verifyToken from "../middleware/verifytoken.middleware";
 const router = Router();   
 
 router.get('/', userCriteria, UserController.getUsers);
+router.get('/profile',verifyToken, UserController.getProfile);
 router.get('/:id',userCriteria, UserController.getUser); 
 router.post('/login', UserController.login);
 router.post('/',userCriteria, UserController.createUser);
 router.put('/:id', UserController.updateUser);
 router.delete('/:id', UserController.deleteUser);
-router.get('/profile',verifyToken, UserController.getProfile);
 
 export default router;
