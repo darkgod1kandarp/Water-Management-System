@@ -3,6 +3,7 @@ import e, { Request, Response } from 'express';
 import { Op } from 'sequelize';   
 import getLogger from '../utils/logger';
 import Customers from '../models/customer.model';
+import Logs from '../models/logs.model';
 
 const logger = getLogger();
 
@@ -10,7 +11,8 @@ const  RoutesController = {
 
     // Get all the routes
     async getRoutes(req: Request, res: Response) {
-        const routes = await Routes.findAll({order:[['createdAt','DESC']]});
+        const routes = await Routes.findAll({ order: [ [ 'createdAt', 'DESC' ] ] });
+        
         logger.info('Getting all the routes');
         return res.json(routes);
     },
@@ -32,6 +34,12 @@ const  RoutesController = {
         try{
             logger.info('Creating a new route');
             const route = await Routes.create(req.body);
+            await Logs.create({
+                user_id: res.locals.user.id,
+                action: 'create',
+                module: 'route',
+                message: `Created route with id ${route.id}`,
+            });
             return res.json(route);
         }catch (error) {
             logger.error('Error while creating a new route',error);
@@ -47,6 +55,12 @@ const  RoutesController = {
             logger.error(`Route with id ${id} not found`);
             return res.sendStatus(404) ;
         }
+        await Logs.create({
+            user_id: res.locals.user.id,
+            action: 'update',
+            module: 'route',
+            message: `Updated route with id ${route.id} New Name: ${req.body.route_name} Old Name: ${route.route_name}`,
+        })
         logger.info(`Updating the route with id ${id}`);
         route.update(req.body);
         return res.json(route);
@@ -65,6 +79,12 @@ const  RoutesController = {
             logger.error(`Route with id ${id} not found`);
             return res.sendStatus(404);
         }
+        await Logs.create({
+            user_id: res.locals.user.id,
+            action: 'delete',
+            module: 'route',
+            message: `Deleted route with id ${route.id}`,
+        });
         route.destroy();
         res.json(route);
     },

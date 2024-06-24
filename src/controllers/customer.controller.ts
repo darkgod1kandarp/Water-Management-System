@@ -7,6 +7,7 @@ import Routes from '../models/routes.model';
 
 // Importing the logger
 import getLogger from '../utils/logger';
+import Logs from '../models/logs.model';
 
 const logger = getLogger();
 
@@ -39,8 +40,16 @@ const  CustomerController = {
         // Ensuring customer name to be unique
         try {
             const customer = await Customer.create(req.body);
+
+            await Logs.create({
+                user_id: res.locals.user.id,
+                action: 'create',
+                module: 'customer',
+                message: `Created customer with id ${customer.id}`,
+            })
             logger.info('Creating a new customer');
             return res.json(customer);
+
         } catch (error:any)
         {
             logger.error('Error while creating a new customer',error);
@@ -71,6 +80,13 @@ const  CustomerController = {
         // Updating the customer details
         logger.info(`Updating the customer with id ${id}`);
         try{
+            
+            await Logs.create({
+                user_id: res.locals.user.id,
+                action: 'update',
+                module: 'customer',
+                message: `Updated customer with id ${customer.id} Old name ${customer.name} New name ${req.body.name}, Old address ${customer.address} New address ${req.body.address}, Old bottle_tally ${customer.bottle_tally} New bottle_tally ${req.body.bottle_tally}, Old route_id ${customer.route_id} New route_id ${req.body.route_id} `,
+            });
             customer.update(req.body);
             res.json(customer);
         }
@@ -90,7 +106,12 @@ const  CustomerController = {
             logger.error(`Customer with id ${id} not found`);
             return res.sendStatus(404);
         }
-
+        await Logs.create({
+            user_id: res.locals.user.id,
+            action: 'delete',
+            module: 'customer',
+            message: `Deleted customer with id ${customer.id}`,
+        });
         try {
             customer.destroy();
             res.json(customer);

@@ -6,6 +6,7 @@ import Truck   from '../models/trucks.model';
 
 // Importing the logger
 import getLogger from '../utils/logger';
+import Logs from '../models/logs.model';
 
 const logger = getLogger();  
 
@@ -35,6 +36,12 @@ const TruckController = {
         try {
             const truck = await Truck.create(req.body);
             logger.info('Creating a new truck');
+            await Logs.create({
+                user_id: res.locals.user.id,
+                action: 'create',
+                module: 'truck',
+                message: `Created truck with id ${truck.id}`,
+            });
             res.json(truck);
         } catch (error: any) {
             console.log(error);
@@ -64,7 +71,14 @@ const TruckController = {
         }
 
         // Updating the truck details
-        try{
+        try {
+            
+            await Logs.create({
+                user_id: res.locals.user.id,
+                action: 'update',
+                module: 'truck',
+                message: `Updated truck with id ${truck.id} New Truck No. : ${req.body.truck_no} Old Truck No. : ${truck.truck_no}`,
+            })
             truck.update(req.body);
             res.json(truck);
         } catch (error) {
@@ -81,6 +95,12 @@ const TruckController = {
             logger.error(`Truck with id ${id} not found`);
             return res.sendStatus(404);
         }
+        await Logs.create({
+            user_id: res.locals.user.id,
+            action: 'delete',
+            module: 'truck',
+            message: `Deleted truck with id ${truck.id}`,
+        })
         truck.destroy();
         res.json(truck);
     },

@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import generateToken from '../middleware/generatetoken.middleware';
 import bcrypt from 'bcryptjs';
+import Logs from '../models/logs.model';
 
 const logger = getLogger();
 const UserController = {
@@ -45,6 +46,12 @@ const UserController = {
 			logger.error('Invalid credentials');
 			return res.sendStatus(401);
 		}
+		await Logs.create({
+			user_id: user.id,
+			action: 'login',
+			module: 'user',
+			message: `User logged in`,
+		});
 		const token = generateToken(user.id, user.role);
 		res.json({ token, user });
 	},
@@ -63,6 +70,12 @@ const UserController = {
 		try {
 			const user = await UserModel.create(req.body);
 			logger.info('Creating a new user');
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'create',
+				module: 'user',
+				message: `Created user with id ${user.id}`,
+			})
 			res.json(user);
 		} catch (error) {
 			logger.error('Error while creating a new user');
@@ -99,6 +112,12 @@ const UserController = {
 					const salt: any = process.env.SALT || 10;
 					req.body.password = await bcrypt.hash(req.body.password, salt);
 				}
+				await Logs.create({
+					user_id: res.locals.user.id,
+					action: 'update',
+					module: 'user',
+					message: `Updated user with id ${user.id} New Name: ${req.body.username} Old Name: ${user.username} New Role: ${req.body.role} Old Role: ${user.role} Old IsNew: ${user.isNew} New IsNew: ${req.body.isNew}`,
+				});
 				await user.update(req.body);
 			} catch (error) {
 				logger.error('Error while updating the user');
@@ -122,6 +141,12 @@ const UserController = {
 				logger.error(`User with id ${req.params.id} not found`);
 				return res.sendStatus(404);
 			}
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'delete',
+				module: 'user',
+				message: `Deleted user with id ${user.id}`,
+			});
 			await user.destroy();
 			logger.info(`Deleting the user with id ${req.params.id}`);
 			return res.sendStatus(204);

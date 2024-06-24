@@ -6,6 +6,7 @@ import Customer from '../models/customer.model';
 import jsonToExcel from '../Services/Excel';
 import Route from '../models/routes.model';
 import { GenerateIndividualReportInput, generateIndividualReport, generateReport } from '../utils/driver';
+import Logs from '../models/logs.model';
 const logger = getLogger();
 const DriverEntriesController = {
 	async getDriverEntries(req: Request, res: Response) {
@@ -98,6 +99,14 @@ const DriverEntriesController = {
 		try {
 			const report = Object.values(await generateIndividualReport({ startDate, endDate, customerName, driverName, routeId, sortBy }));
 			const fileUrl = await jsonToExcel(report);
+
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'download',
+				module: 'driver_entries',
+				message: `Exported individual report from ${startDate} to ${endDate}`,
+			});
+
 			res.json({ fileUrl: `${host_url}/${fileUrl}` });
 		} catch (error: any) {
 			logger.error('Error while generating report');
@@ -127,7 +136,12 @@ const DriverEntriesController = {
 				},
 			);
 
-			console.log(report);
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'download',
+				module: 'driver_entries',
+				message: `Exported cumulative report from ${start} to ${end}`,
+			});
 			const fileUrl = await jsonToExcel(report);
 			res.json({ fileUrl: `${host_url}/${fileUrl}` });
 		} catch (error: any) {
