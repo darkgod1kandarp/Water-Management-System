@@ -40,6 +40,12 @@ const DriverEntriesController = {
 		try {
 			const driverEntry = await DriverEntries.create(req.body);
 			logger.info('Creating a new driver entry');
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'create',
+				module: 'driver_entries',
+				message: `Created driver entry with id ${driverEntry.id}`,
+			})
 			res.json(driverEntry);
 		} catch (error) {
 			console.log(error);
