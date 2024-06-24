@@ -44,6 +44,11 @@ export const generateIndividualReport = async (options: GenerateIndividualReport
 				as: 'customer',
 				include: [ { model: Route, as: 'route' } ],
 			},
+			{
+				model: User,
+				as: 'driver',
+				
+			}
 		],
 		order: [ [ sortBy, 'DESC' ] ] as Order,
 	};

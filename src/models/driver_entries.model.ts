@@ -1,6 +1,6 @@
 import { sequelize, DataTypes } from '../utils/sequelize';
 import customerModel from './customer.model';
-
+import userModel from './user.model';
 // Define the DriverEntries model
 const Drivers = sequelize.define(
 	'driver_entries',
@@ -99,4 +99,10 @@ Drivers.belongsTo(customerModel, {
 	targetKey: 'id',
 	as: 'customer',
 });
+Drivers.belongsTo(userModel, {
+    foreignKey: 'driver_id',
+    targetKey: 'id',
+    as: 'driver',
+});
+
 export default Drivers;
