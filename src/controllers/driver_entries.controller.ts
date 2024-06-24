@@ -18,8 +18,8 @@ const DriverEntriesController = {
 		const driverEntries = await generateIndividualReport({ startDate: start, endDate: end, customerName: customer, driverName: driver, routeId: route, isPaginated: true, page, limit, sortBy: sort }) as any;
 		logger.info('Getting all the driver entries');
 		res.json({
-			entries: driverEntries.rows,
-			total: driverEntries.count,
+			rows: driverEntries.rows,
+			count: driverEntries.count,
 			page: page,
 			pages: Math.ceil(driverEntries.count / limit),
 		});
