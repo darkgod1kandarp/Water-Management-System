@@ -106,7 +106,7 @@ const DriverEntriesController = {
 			const report = Object.values(await generateIndividualReport({ startDate, endDate, customerName, driverName, routeId, sortBy })).map(
 				(entry) => {
 					return {
-						'Customer Name': entry.customer.customer_name,
+						'Customer Name': entry.customer.name,
 						'Driver': entry.driver.name,
 						'Address': entry.customer.address,
 						'Route': entry.customer.route.route_name,
