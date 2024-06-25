@@ -1,7 +1,7 @@
 import Cron from 'node-cron';
 import { generateReport } from '../utils/driver';
 import { DateTime } from 'luxon';
-import jsonToExcel from './Excel';
+import {jsonToCummulativeExcel} from './Excel';
 import { readFile, readFileSync } from 'fs';
 import { SendEmail, templates } from './SendEmail';
 import { ReportTemplateData } from './types';
@@ -37,7 +37,7 @@ export default class CronJob {
                 'Bottle Received': customer.bottle_received
             }
         });
-        const url = await jsonToExcel(report);
+        const url = await jsonToCummulativeExcel(report);
         const buffer = readFileSync(url, { encoding: 'base64' });
         const weeklyFileName = `customer-data-${getMonthWeekNumber(start)}${getOrdinalSuffix(getMonthWeekNumber(start))}-Week-of-${start.toFormat('MMMM')}.xlsx`;
         const monthlyFileName = `customer-data-${start.toFormat('MMMM')}.xlsx`;
