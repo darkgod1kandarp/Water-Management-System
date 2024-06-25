@@ -1,7 +1,7 @@
 import Cron from 'node-cron';
-import { generateReport } from '../utils/driver';
+import { generateIndividualReport, generateReport } from '../utils/driver';
 import { DateTime } from 'luxon';
-import {jsonToCummulativeExcel} from './Excel';
+import { jsonToCummulativeExcel, jsonToIndividualExcel } from './Excel';
 import { readFile, readFileSync } from 'fs';
 import { SendEmail, templates } from './SendEmail';
 import { ReportTemplateData } from './types';
@@ -27,6 +27,27 @@ export default class CronJob {
         const start = isWeekly ? DateTime.now().minus({ weeks: 1 }).startOf('week') : DateTime.now().minus({ months: 1 }).startOf('month');
         const end = isWeekly ? DateTime.now().minus({ weeks: 1 }).endOf('week') : DateTime.now().minus({ months: 1 }).endOf('month');
         const reports = await generateReport(start.toFormat('yyyy-MM-dd'), end.toFormat('yyyy-MM-dd'));
+        const invidividualReport = Object.values(await generateIndividualReport({
+            startDate: start.toFormat('yyyy-MM-dd'), endDate: end.toFormat('yyyy-MM-dd'),
+            sortBy: 'createdAt',
+            isPaginated: false
+        })).map(
+            (entry) => {
+                return {
+                    'Customer Name': entry.customer.name,
+                    'Driver': entry.driver.name,
+                    'Address': entry.customer.address,
+                    'Route': entry.customer.route.route_name,
+                    'Bottle Delivered': entry.bottle_delivered,
+                    'Bottle Received': entry.bottle_received,
+                    'Date': entry.createdAt,
+                    'Bottle Tally': entry.bottle_tally,
+                }
+            }
+        );
+
+        const url2 = await jsonToIndividualExcel(invidividualReport);
+
         const report = Object.values(reports).map(customer => {
             return {
                 'Customer Name': customer.customer_name,
@@ -39,6 +60,7 @@ export default class CronJob {
         });
         const url = await jsonToCummulativeExcel(report);
         const buffer = readFileSync(url, { encoding: 'base64' });
+        const buffer2 = readFileSync(url2, { encoding: 'base64' });
         const weeklyFileName = `customer-data-${getMonthWeekNumber(start)}${getOrdinalSuffix(getMonthWeekNumber(start))}-Week-of-${start.toFormat('MMMM')}.xlsx`;
         const monthlyFileName = `customer-data-${start.toFormat('MMMM')}.xlsx`;
         SendEmail({
@@ -52,6 +74,10 @@ export default class CronJob {
                 {
                     filename: `customer-data-${isWeekly ? weeklyFileName : monthlyFileName}.xlsx`,
                     content: buffer
+                },
+                {
+                    filename: `customer-logs-data-${isWeekly ? weeklyFileName : monthlyFileName}.xlsx`,
+                    content: buffer2
                 }
             ],
             onSuccessfulSend: () => {
@@ -60,7 +86,7 @@ export default class CronJob {
             }
         })
     }
-    
+
     start() {
         // Run a task every 1st of the month at 00:00
         Cron.schedule('0 0 1 * *', async () => this.sendReportEmail());
