@@ -116,6 +116,7 @@ const DriverEntriesController = {
 			res.json({ fileUrl: `${host_url}/${fileUrl}` });
 		} catch (error: any) {
 			logger.error('Error while generating report');
+			console.log(error);
 			if (
 				error!.message === 'Timerange not provided' ||
 				error!.message === 'Invalid timerange'

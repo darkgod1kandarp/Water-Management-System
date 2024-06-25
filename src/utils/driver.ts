@@ -20,7 +20,7 @@ export interface PaginatedGenerateIndividualReportInput extends GenerateIndividu
 	limit?: number;
 }
 export const generateIndividualReport = async (options: GenerateIndividualReportInput | PaginatedGenerateIndividualReportInput) => {
-	const { startDate, endDate, customerName, driverName, routeId, isPaginated, sortBy } = options;
+	const { startDate, endDate, customerName, driverName, isPaginated, sortBy } = options;
 	const where: any = {};
 	if (startDate && endDate) {
 		where.createdAt = { [ Op.between ]: [ startDate, endDate ] };
@@ -32,9 +32,6 @@ export const generateIndividualReport = async (options: GenerateIndividualReport
 	if (driverName) {
 		const possibleDrivers = await User.findAll({ where: { name: { [ Op.iLike ]: `%${driverName}%` } } });
 		where.driver_id = { [ Op.in ]: possibleDrivers.map((driver) => driver.id) };
-	}
-	if (routeId) {
-		where.route_id = routeId;
 	}
 	const queryOptions = {
 		where,
