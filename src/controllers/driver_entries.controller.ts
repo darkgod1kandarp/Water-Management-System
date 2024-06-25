@@ -3,10 +3,10 @@ import getLogger from '../utils/logger';
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import Customer from '../models/customer.model';
-import jsonToExcel from '../Services/Excel';
 import Route from '../models/routes.model';
 import { GenerateIndividualReportInput, generateIndividualReport, generateReport } from '../utils/driver';
 import Logs from '../models/logs.model';
+import {jsonToCummulativeExcel, jsonToIndividualExcel} from '../Services/Excel';
 const logger = getLogger();
 const DriverEntriesController = {
 	async getDriverEntries(req: Request, res: Response) {
@@ -103,8 +103,21 @@ const DriverEntriesController = {
 		const { startDate, endDate, customerName, driverName, routeId, sortBy } = req.query as GenerateIndividualReportInput;
 		const host_url = `${req.protocol}://${req.get('host')}`;
 		try {
-			const report = Object.values(await generateIndividualReport({ startDate, endDate, customerName, driverName, routeId, sortBy }));
-			const fileUrl = await jsonToExcel(report);
+			const report = Object.values(await generateIndividualReport({ startDate, endDate, customerName, driverName, routeId, sortBy })).map(
+				(entry) => {
+					return {
+						'Customer Name': entry.customer.customer_name,
+						'Driver': entry.driver.name,
+						'Address': entry.customer.address,
+						'Route': entry.customer.route.route_name,
+						'Bottle Delivered': entry.bottle_delivered,
+						'Bottle Received': entry.bottle_received,
+						'Date': entry.createdAt,
+						'Bottle Tally': entry.bottle_tally,
+					};
+				},
+			);
+			const fileUrl = await jsonToIndividualExcel(report);
 
 			await Logs.create({
 				user_id: res.locals.user.id,
@@ -149,7 +162,7 @@ const DriverEntriesController = {
 				module: 'driver_entries',
 				message: `Exported cumulative report from ${start} to ${end}`,
 			});
-			const fileUrl = await jsonToExcel(report);
+			const fileUrl = await jsonToCummulativeExcel(report);
 			res.json({ fileUrl: `${host_url}/${fileUrl}` });
 		} catch (error: any) {
 			logger.error('Error while generating report');

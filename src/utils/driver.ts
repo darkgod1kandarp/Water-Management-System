@@ -47,7 +47,7 @@ export const generateIndividualReport = async (options: GenerateIndividualReport
 				
 			}
 		],
-		order: [ [ sortBy, 'DESC' ] ] as Order,
+		order: [ [ sortBy , 'DESC' ] ] as Order,
 	};
 	if (isPaginated) {
 		let { page, limit } = options as PaginatedGenerateIndividualReportInput;
