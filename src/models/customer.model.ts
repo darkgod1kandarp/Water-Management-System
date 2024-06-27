@@ -32,6 +32,13 @@ const Customers = sequelize.define('customer', {
     address: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    bottle_charge: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+           min : 0
+       }
     }
 },
 {  

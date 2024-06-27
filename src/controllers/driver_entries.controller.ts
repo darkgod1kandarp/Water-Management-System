@@ -114,6 +114,8 @@ const DriverEntriesController = {
 						'Bottle Received': entry.bottle_received,
 						'Date': entry.createdAt,
 						'Bottle Tally': entry.bottle_tally,
+						'Per Bottle Charge': entry.customer.bottle_charge,
+						'Amount': entry.bottle_delivered * entry.customer.bottle_charge,
 					};
 				},
 			);
@@ -152,6 +154,8 @@ const DriverEntriesController = {
 						Address: customer.address,
 						'Bottle Delivered': customer.bottle_delivered,
 						'Bottle Received': customer.bottle_received,
+						'Per Bottle Charge': customer.bottle_charge,
+						'Revenue': customer.bottle_delivered * customer.bottle_charge,
 					};
 				},
 			);

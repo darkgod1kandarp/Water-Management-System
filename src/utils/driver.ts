@@ -66,6 +66,8 @@ interface CustomerEntry {
 	address: string;
 	bottle_delivered: number;
 	bottle_received: number;
+	bottle_charge: number;
+	revenue: number;
 }
 interface CustomerBottleTally {
 	[ customerId: string ]: CustomerEntry;
@@ -124,6 +126,8 @@ export const generateReport = async (startDate: String, endDate: String) => {
 			address: entry.customer.address,
 			bottle_delivered: 0,
 			bottle_received: 0,
+			bottle_charge: entry.customer.bottle_charge,
+			revenue: 0,
 		};
 	}
 	for (const [
@@ -133,6 +137,7 @@ export const generateReport = async (startDate: String, endDate: String) => {
 		if (customer_bottle_tally[ customerId ]) {
 			customer_bottle_tally[ customerId ].bottle_delivered = bottle_delivered;
 			customer_bottle_tally[ customerId ].bottle_received = bottle_received;
+			customer_bottle_tally[customerId].revenue = bottle_delivered * customer_bottle_tally[customerId].bottle_charge;
 		}
 	}
 	return customer_bottle_tally;
