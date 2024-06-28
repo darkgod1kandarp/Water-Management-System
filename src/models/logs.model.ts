@@ -29,8 +29,9 @@ const Logs = sequelize.define(
             allowNull: false,
         },
         message: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
+            
         },
         createdAt: {
             type: DataTypes.DATE,
