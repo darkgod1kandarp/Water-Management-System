@@ -47,13 +47,14 @@ def filling_route_table(cursor, connection):
 def filling_customer_table(cursor, connection):
     name = generate_slug(3)
     address = generate_slug(4)
+    bottle_charge = random.randint(1, 10)
     while not existing_name.get(name):
         name = generate_slug(3)
         existing_name[name] = True
     cursor.execute('SELECT id FROM routes')
     routes = cursor.fetchall()
     route_id = random.choice(routes)[0]
-    cursor.execute('INSERT INTO customers (name, route_id, bottle_tally, address, "createdAt", "updatedAt") VALUES (%s, %s, %s, %s, %s, %s);', (name, route_id, 1, address, datetime.now(), datetime.now()))
+    cursor.execute('INSERT INTO customers (name, route_id, bottle_tally, address,bottle_charge, "createdAt", "updatedAt") VALUES (%s, %s, %s, %s,%s, %s, %s);', (name, route_id, 1, address,bottle_charge, datetime.now(), datetime.now()))
     connection.commit()
 
 def filling_truck_table(cursor, connection):
