@@ -91,6 +91,7 @@ const  CustomerController = {
             res.json(customer);
         }
         catch (error) {
+            console.log(error);
             logger.error('Error while updating the customer');
             return res.sendStatus(500);
         }
