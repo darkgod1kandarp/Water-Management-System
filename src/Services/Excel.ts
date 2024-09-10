@@ -34,8 +34,10 @@ export const jsonToCummulativeExcel = async (data: CustomerCummulativeRow[]) => 
         { header: 'Address', key: 'Address', width: 20 },
         { header: 'Bottle Delivered', key: 'Bottle Delivered', width: 20 },
         { header: 'Bottle Received', key: 'Bottle Received', width: 20 },
+       
         { header: 'Per Bottle Charge', key: 'Per Bottle Charge', width: 20 },
-        { header: 'Revenue', key: 'Revenue', width: 20 }
+        { header: 'Revenue', key: 'Revenue', width: 20 },
+       
     ];
 
     sheet.addRows(data);
@@ -56,11 +58,11 @@ export const jsonToIndividualExcel = async (data: IndividualEntry[]) => {
         { header: 'Route', key: 'Route', width: 20 },
         { header: 'Address', key: 'Address', width: 20 },
         { header: 'Bottle Delivered', key: 'Bottle Delivered', width: 20 },
+        { header: 'Mode Of Payment', key: 'Mode Of Payment', width: 20 },
         { header: 'Bottle Received', key: 'Bottle Received', width: 20 },
         { header: 'Bottle Tally', key: 'Bottle Tally', width: 20 },
         { header: 'Amount', key: 'Amount', width: 20 }
     ];
-
     sheet.addRows(data);
     const filename = `customer-logs-data-${new Date().getTime()}.xlsx`;
     await workbook.xlsx.writeFile(`uploads/${filename}`);
