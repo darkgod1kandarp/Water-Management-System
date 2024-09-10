@@ -31,12 +31,12 @@ const Drivers = sequelize.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		modeOfPayment: {
-			type: DataTypes.ENUM,
-			values: [ 'cash', 'online','card' ],
-			allowNull: false,
-			defaultValue: 'cash',
-		},
+		// modeOfPayment: {
+		// 	type: DataTypes.ENUM,
+		// 	values: [ 'cash', 'online','card' ],
+		// 	allowNull: false,
+		// 	defaultValue: 'cash',
+		// },
 		truck_no: {
 			type: DataTypes.UUID,
 			references: {
