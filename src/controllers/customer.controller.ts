@@ -70,7 +70,8 @@ const CustomerController = {
 	async updateCustomer(req: Request, res: Response) {
 		const { id } = req.params;
 		// Checking if customer exists
-		const customer = await Customer.findByPk(id);
+        const customer = await Customer.findByPk(id);
+        console.log(req.body);
 		if (!customer) {
 			logger.error(`Customer with id ${id} not found`);
 			return res.sendStatus(404);
