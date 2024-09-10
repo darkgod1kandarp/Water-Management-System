@@ -98,7 +98,7 @@ const CustomerController = {
 				user_id: res.locals.user.id,
 				action: 'update',
 				module: 'customer',
-				message: `Updated customer with id ${customer.id} Old name ${customer.name} New name ${req.body.name}, Old address ${customer.address} New address ${req.body.address}, Old bottle_tally ${customer.bottle_tally} New bottle_tally ${req.body.bottle_tally}, Old route_id ${customer.route_id} New route_id ${req.body.route_id} `,
+				message: `Updated customer with id ${customer.id} Old name ${customer.name} New name ${req.body.name}, Old address ${customer.address} New address ${req.body.address}, Old bottle_tally ${customer.bottle_tally},  New bottle_tally ${req.body.bottle_tally}, Old route_id ${customer.route_id} New route_id ${req.body.route_id},Old bottle_charge ${customer.bottle_charge} New bottle_charge ${req.body.bottle_charge} `,
 			});
 			customer.update(req.body);
 			res.json(customer);
