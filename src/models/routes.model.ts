@@ -18,17 +18,14 @@ const Route = sequelize.define('routes', {
     route_name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     }
 },
 {
     paranoid: true,
     hooks: {
         beforeCreate: async (route:any) => {
-            const existingRoute = await sequelize.models.routes.findOne({where: {route_name: route.route_name}});  
-            if (existingRoute) {
-                logger.error(`Route with name ${route.route_name} already exists`);
-                throw new Error(`Route with name ${route.route_name} already exists`);
-            }
+            
         }
     }
 }

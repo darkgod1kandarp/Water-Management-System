@@ -13,16 +13,14 @@ export default sequelize.define('trucks', {
     truck_no: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     }
 },
 {   paranoid: true,
     hooks: {
-        beforeCreate: async (truck:any) => {
-            const existingTruck = await sequelize.models.trucks.findOne({where: {truck_no: truck.truck_no}});  
-            if (existingTruck) {
-                logger.error(`Truck with name ${truck.truck_no} already exists`);
-                throw new Error(`Truck with name ${truck.truck_no} already exists`);
-            }
+        beforeCreate: async (truck: any) => {
+            
+            
         }
     },
 }

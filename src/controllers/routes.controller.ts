@@ -41,7 +41,13 @@ const  RoutesController = {
                 message: `Created route with id ${route.id}`,
             });
             return res.json(route);
-        }catch (error) {
+        } catch (error:any) {
+
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                logger.error('Error while creating a new route',error);
+                return res.status(400).json({error: 'Route name already exists'});
+            }
+
             logger.error('Error while creating a new route',error);
             return res.status(500).json({error: 'Error while creating a new route'});
     }

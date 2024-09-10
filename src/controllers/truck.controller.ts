@@ -42,8 +42,13 @@ const TruckController = {
                 module: 'truck',
                 message: `Created truck with id ${truck.id}`,
             });
-            res.json(truck);
+            return res.json(truck);
         } catch (error: any) {
+
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                logger.error('Error while creating a new truck',error);
+                return res.status(400).json({error: 'Truck name already exists'});
+            }
             console.log(error);
             logger.error('Error while creating a new truck');
             return res.status(500).json({error: error.message});
