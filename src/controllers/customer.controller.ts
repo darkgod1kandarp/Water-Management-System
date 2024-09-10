@@ -41,9 +41,10 @@ const CustomerController = {
 	// Create the customer details
 	async createCustomer(req: Request, res: Response) {
 		// Ensuring customer name to be unique
-		try {
+        try {
+            console.log('Creating a new customer');
 			const customer = await Customer.create(req.body);
-
+            console.log('Customer Created');
 			await Logs.create({
 				user_id: res.locals.user.id,
 				action: 'create',
