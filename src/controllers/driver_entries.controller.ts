@@ -38,9 +38,8 @@ const DriverEntriesController = {
 
 	async createDriverEntry(req: Request, res: Response) {
 		try {
-			console.log(
-				`req.body`,req.body
-			)
+			
+			
 			const driverEntry = await DriverEntries.create(req.body);
 			logger.info('Creating a new driver entry');
 			await Logs.create({

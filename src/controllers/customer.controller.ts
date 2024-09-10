@@ -52,6 +52,10 @@ const  CustomerController = {
 
         } catch (error:any)
         {
+            if (error.name === 'SequelizeUniqueConstraintError') { 
+                logger.error('Error while creating a new customer',error);
+                return res.status(400).json({error: 'Customer with name already exists'});
+            }
             logger.error('Error while creating a new customer',error);
             return res.sendStatus(500).json({error:error.message})
         }
