@@ -15,6 +15,7 @@ const Customers = sequelize.define('customer', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     },
     route_id: {
         type: DataTypes.UUID,
@@ -43,16 +44,6 @@ const Customers = sequelize.define('customer', {
 },
 {  
     paranoid: true,
-    hooks: {
-        beforeCreate: async (customer:any) => {
-            const existingCustomer = await sequelize.models.customer.findOne({where: {name: customer.name}});  
-            if (existingCustomer) {
-                logger.error(`Customer with name ${customer.name} already exists`);
-                console.log(`Customer with name ${customer.name} already exists 2233`);
-                throw new Error(`Customer with name ${customer.name} already exists`);
-            }
-        },
-    },
 },
 );
 
