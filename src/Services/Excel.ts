@@ -58,7 +58,7 @@ export const jsonToIndividualExcel = async (data: IndividualEntry[]) => {
         { header: 'Route', key: 'Route', width: 20 },
         { header: 'Address', key: 'Address', width: 20 },
         { header: 'Bottle Delivered', key: 'Bottle Delivered', width: 20 },
-        { header: 'Mode Of Payment', key: 'Mode Of Payment', width: 20 },
+        { header: 'Mode Of Payment', key: 'Mode of Payment', width: 20 },
         { header: 'Bottle Received', key: 'Bottle Received', width: 20 },
         { header: 'Bottle Tally', key: 'Bottle Tally', width: 20 },
         { header: 'Amount', key: 'Amount', width: 20 }

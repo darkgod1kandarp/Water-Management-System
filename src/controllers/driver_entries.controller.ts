@@ -39,7 +39,7 @@ const DriverEntriesController = {
 	async createDriverEntry(req: Request, res: Response) {
 		try {
 			
-			
+
 			const driverEntry = await DriverEntries.create(req.body);
 			logger.info('Creating a new driver entry');
 			await Logs.create({
@@ -117,6 +117,7 @@ const DriverEntriesController = {
 						'Date': entry.createdAt,
 						'Bottle Tally': entry.bottle_tally,
 						'Per Bottle Charge': entry.customer.bottle_charge,
+						'Mode of Payment': entry.payment_mode,
 						'Amount': entry.bottle_delivered * entry.customer.bottle_charge,
 					};
 				},
