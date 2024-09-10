@@ -109,7 +109,7 @@ const DriverEntriesController = {
 				(entry) => {
 					return {
 						'Customer Name': entry.customer.name,
-						'Driver': entry.driver.name,
+						'Driver': entry.driver.username,
 						'Address': entry.customer.address,
 						'Route': entry.customer.route.route_name,
 						'Bottle Delivered': entry.bottle_delivered,
