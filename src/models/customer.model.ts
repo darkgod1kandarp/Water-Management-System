@@ -15,7 +15,6 @@ const Customers = sequelize.define('customer', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     route_id: {
         type: DataTypes.UUID,
@@ -44,6 +43,11 @@ const Customers = sequelize.define('customer', {
 },
 {  
     paranoid: true,
+    hooks: {
+        beforeCreate: async (customer:any) => {
+            
+        },
+    },
 },
 );
 
