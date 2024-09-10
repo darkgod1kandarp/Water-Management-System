@@ -117,7 +117,7 @@ const DriverEntriesController = {
 						'Date': entry.createdAt,
 						'Bottle Tally': entry.bottle_tally,
 						'Per Bottle Charge': entry.customer.bottle_charge,
-						'Mode of Payment': entry.payment_mode,
+						'Mode of Payment': entry.mode_of_payment,
 						'Amount': entry.bottle_delivered * entry.customer.bottle_charge,
 					};
 				},
