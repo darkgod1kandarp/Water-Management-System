@@ -25,7 +25,7 @@ const Logs = sequelize.define(
         },
         module: {
             type: DataTypes.ENUM,
-            values: [ 'customer', 'user', 'route', 'driver_entries' ],
+            values: [ 'customer', 'user', 'route', 'driver_entries','truck' ],
             allowNull: false,
         },
         message: {
