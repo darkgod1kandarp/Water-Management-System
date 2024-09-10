@@ -85,7 +85,7 @@ const Drivers = sequelize.define(
 					}
 					customer.bottle_tally = entry.bottle_tally;
 					console.log('Customer', customer.bottle_tally, entry.bottle_tally);
-					customer.deleteAt = null;
+					customer.deletedAt = null;
 					await customer.save();
 				} else {
 					throw new Error(`Customer with id ${entry.customer_id} not found`);
