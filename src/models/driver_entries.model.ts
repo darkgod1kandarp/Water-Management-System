@@ -33,7 +33,7 @@ const Drivers = sequelize.define(
 		},
 		mode_of_payment: {
 			type: DataTypes.ENUM,
-			values: [ 'cash', 'online', 'card','other' ],
+			values: [ 'cash', 'online', 'card', 'credit', 'coupon' ],
 			allowNull: false,
 			defaultValue: 'cash',
 		},
@@ -55,6 +55,18 @@ const Drivers = sequelize.define(
 			allowNull: false,
 			onDelete: 'CASCADE',
         },
+		number_of_coupon: {
+			type: DataTypes.INTEGER,    
+			allowNull: true, 
+		},
+		credits: {
+			type: DataTypes.INTEGER, 
+			allowNull: true
+		}, 
+		comments: {
+			type: DataTypes.TEXT, 
+			allowNull: true
+		},
         createdAt: {
             type: DataTypes.DATE,
             defaultValue: sequelize.literal('NOW()'),
@@ -62,7 +74,7 @@ const Drivers = sequelize.define(
         updatedAt: {
             type: DataTypes.DATE,
             defaultValue: sequelize.literal('NOW()'),
-        },
+        }
 	},
 	{
 		paranoid: true,
@@ -71,7 +83,21 @@ const Drivers = sequelize.define(
 				const customer: any = await customerModel.findOne({
 					where: { id: entry.customer_id },
 				});
+
 				if (customer) {
+
+					if (entry.model_of_payment === "credit" ){  
+						const singleBottleCharge = customer.bottle_charge;  
+						customer.credit += (parseInt(singleBottleCharge) * parseInt(entry.bottle_delivered));   
+					}   
+					if (entry.mode_of_payment === "coupon" && customer.coupon_count < entry.number_of_coupon){   
+						throw new Error(
+							'Customer does not have that many coupon code.'
+						)
+					} else{
+						customer.coupon_count -= entry.number_of_coupon    
+					}
+
 					if (entry.bottle_received < 0 || entry.bottle_delivered < 0) {
 						throw new Error(
 							'Bottle received and bottle delivered cannot be negative',

@@ -38,8 +38,6 @@ const DriverEntriesController = {
 
 	async createDriverEntry(req: Request, res: Response) {
 		try {
-			
-
 			const driverEntry = await DriverEntries.create(req.body);
 			logger.info('Creating a new driver entry');
 			await Logs.create({
@@ -81,8 +79,6 @@ const DriverEntriesController = {
 			return res.sendStatus(500);
 		}
 	},
-
-
 
 	async getCumulativeEntries(req: Request, res: Response) {
 		let { start, end } = req.query as { start: string; end: string };
@@ -144,6 +140,7 @@ const DriverEntriesController = {
 			return res.sendStatus(500);
 		}
 	},
+
 	async generateCumulativeExcel(req: Request, res: Response) {
 		let { start, end } = req.query as { start: string; end: string };
 		const host_url = `${req.protocol}://${req.get('host')}`;

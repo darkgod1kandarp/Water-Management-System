@@ -172,6 +172,7 @@ const CustomerController = {
 		res.json(customers);
 	},
 
+	// Check for initial Data updating for customer side 
 	async updateInitialData(req: Request, res: Response){   
 		const { id } = req.params;
 		// Checking if customer exists

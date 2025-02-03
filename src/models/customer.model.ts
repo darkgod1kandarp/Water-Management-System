@@ -48,9 +48,13 @@ const Customers = sequelize.define('customer', {
         type: DataTypes.BOOLEAN,    
         defaultValue: false
     }, 
-    cupon_count: {
+    coupon_count: {
         type: DataTypes.INTEGER, 
         defaultValue: 0, 
+    }, 
+    credits: {
+        type: DataTypes.INTEGER, 
+        defaultValue: 0
     }
 },
 {  
