@@ -181,6 +181,11 @@ const CustomerController = {
 			return res.sendStatus(404);
 		}
 
+		if (customer.bottle_count_updated){
+			logger.error(`Customer with id ${id} has been already updated its initial data.`)
+			return res.status(404);
+		}
+
 		try{
 			// Two field required number of bottle, bottle_count_updated, total_count_of_cupon
 			customer.update(req.body);
