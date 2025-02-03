@@ -171,6 +171,33 @@ const CustomerController = {
 
 		res.json(customers);
 	},
+
+	async updateInitialData(req: Request, res: Response){   
+		const { id } = req.params;
+		// Checking if customer exists
+        const customer = await Customer.findByPk(id);
+		if (!customer) {
+			logger.error(`Customer with id ${id} not found`);
+			return res.sendStatus(404);
+		}
+
+		try{
+			// Two field required number of bottle, bottle_count_updated, total_count_of_cupon
+			customer.update(req.body);
+			// Creating Logs for the table to check when does number of bottles count got updated.
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'update',
+				module: 'customer',
+				message: `Updated customers one time freeze data for collecting initial data for total count of bottled and cupon available with customers. `,
+			});
+
+			res.json(customer);
+		}catch (error) {
+			logger.error('Error while deleting the customer');
+			return res.sendStatus(500);
+		}
+	}
 };
 
 export default CustomerController;

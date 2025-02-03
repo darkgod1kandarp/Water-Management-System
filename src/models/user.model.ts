@@ -1,6 +1,5 @@
 import {sequelize, DataTypes, Sequelize}  from  '../utils/sequelize';  
 import bcrypt from 'bcryptjs';
-import DriverEntries from './driver_entries.model';
 
 
 // Define the User(aka driver) model

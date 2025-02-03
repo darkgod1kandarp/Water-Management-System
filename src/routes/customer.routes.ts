@@ -34,5 +34,10 @@ router.get('/route/:id', userCriteria,(req, res) => {
     CustomerController.findCustomerUsingRoute(req, res);
 })
 
-export  default router;
+router.put("/:id", userCriteria, (req, res)=>{
+    CustomerController.updateInitialData(req, res);
+})
+
+
+export default router;
 

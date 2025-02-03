@@ -12,6 +12,14 @@ const Customers = sequelize.define('customer', {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
         primaryKey: true,
     },
+    phoneNumber: {
+        type: DataTypes.STRING,    
+        allowNull: true,
+    },
+    address: {
+        type: DataTypes.TEXT, 
+        allowNull: true
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -29,16 +37,20 @@ const Customers = sequelize.define('customer', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    address: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
     bottle_charge: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
            min : 0
        }
+    }, 
+    bottle_count_updated: {
+        type: DataTypes.BOOLEAN,    
+        defaultValue: false
+    }, 
+    cupon_count: {
+        type: DataTypes.INTEGER, 
+        defaultValue: 0, 
     }
 },
 {  
