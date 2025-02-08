@@ -179,6 +179,55 @@ const DriverEntriesController = {
 			return res.sendStatus(500);
 		}
 	},
+
+	async updateDriverEntries(req: Request, res: Response) {
+		try {
+			const { customerId } = req.params; // Assuming customerId is passed in the request params
+	
+			// Find the latest entry for this customer
+			const latestEntry = await DriverEntries.findOne({
+				where: { customer_id: customerId },
+				order: [['createdAt', 'DESC']], // Get the most recent entry
+			});
+	
+			if (!latestEntry) {
+				logger.error(`No entries found for customer with ID ${customerId}`);
+				return res.status(404).json({ message: 'No entries found for this customer' });
+			}
+	
+			// Ensure that the request does not attempt to update multiple entries
+			if (await DriverEntries.count({ where: { customer_id: customerId } }) > 1) {
+				const newestEntryId = latestEntry.id;
+				const modifyingEntryId = req.body.id; // Assuming the frontend sends an ID
+	
+				if (modifyingEntryId && modifyingEntryId !== newestEntryId) {
+					logger.error(`Attempt to update an older entry (ID: ${modifyingEntryId}) for customer ID ${customerId}`);
+					return res.status(403).json({ message: 'You can only modify the latest entry for this customer' });
+				}
+			}
+	
+			// Update only the latest entry
+			await latestEntry.update(req.body);
+	
+			logger.info(`Updated the latest driver entry for customer ID ${customerId}, Entry ID: ${latestEntry.id}`);
+	
+			// Log the update action
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'update',
+				module: 'driver_entries',
+				message: `Updated the latest driver entry (ID: ${latestEntry.id}) for customer ID ${customerId}`,
+			});
+	
+			res.json(latestEntry);
+		} catch (error) {
+			console.error(error);
+			logger.error('Error while updating the latest driver entry');
+			return res.status(500).json({ error: 'Internal Server Error' });
+		}
+	}
+	
+	
 };
 
 export default DriverEntriesController;

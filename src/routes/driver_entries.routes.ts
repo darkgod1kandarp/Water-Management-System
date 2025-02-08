@@ -34,5 +34,9 @@ route.get('/history/:id', (req, res) => {
     DriverEntriesController.getDriverHistory(req, res);
 })
 
+route.put("/update/:customerId", (req, res) => {
+    DriverEntriesController.updateDriverEntries(req, res);
+});
+
 
 export default route;
