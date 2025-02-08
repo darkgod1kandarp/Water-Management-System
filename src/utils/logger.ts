@@ -21,7 +21,7 @@ const getLogger= ():winston.Logger  => {
                     
                         const { timestamp, level, message } = info;
                         
-                        const ts = DateTime.fromISO(timestamp).toFormat('yyyy-MM-dd HH:mm:ss');
+                        const ts = DateTime.fromISO(timestamp as string).toFormat('yyyy-MM-dd HH:mm:ss');
                         return `${chalk.gray(`[${ts}]`)} ${chalk.green(level)}: ${message}`;
                     }
                     ),

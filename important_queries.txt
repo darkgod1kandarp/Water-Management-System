@@ -1,3 +1,3 @@
 # For adding admin to the database     
 
-Insert into users (username, password,role, "isNew","createdAt","updatedAt") values ('webbound', crypt('', '9QYCJoqAiFzRxvNUg.D-W7wozEf3A'),'admin',TRUE,now(),now());
+Insert into users (username, password,role, "isNew","createdAt","updatedAt") values ('demo1234', crypt('1234', '$2a$12$D0JrsptaHuX4fzHYFfyr5OhvkmhXcEOvyfCS4a31dI.rr805ItoWq'),'admin',TRUE,now(),now());

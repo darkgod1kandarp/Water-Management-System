@@ -1,9 +1,9 @@
 {
-	"testing": {
-		"database": "postgres",
+	"development": {
 		"username": "postgres",
-		"password": "mynewpassword",
-		"host": "localhost",
+		"password": "postgres",
+		"database": "water_management",
+		"host": "postgres",
 		"dialect": "postgres",
 		"port": 5432
 	}

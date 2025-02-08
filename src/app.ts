@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 // Load the environment variables
 dotenv.config();   
 
-const app   = express(); 
+const app  = express(); 
 
 
 // Middleware module   

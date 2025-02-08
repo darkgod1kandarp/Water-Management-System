@@ -21,6 +21,7 @@ const Customers = sequelize.define('customer', {
         allowNull: true
     },
     name: {
+        
         type: DataTypes.STRING,
         allowNull: false,
     },
