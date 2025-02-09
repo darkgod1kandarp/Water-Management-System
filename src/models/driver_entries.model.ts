@@ -55,14 +55,6 @@ const Drivers = sequelize.define(
 			allowNull: false,
 			onDelete: 'CASCADE',
         },
-		number_of_coupon: {
-			type: DataTypes.INTEGER,    
-			allowNull: true, 
-		},
-		credits: {
-			type: DataTypes.INTEGER, 
-			allowNull: true
-		}, 
 		comments: {
 			type: DataTypes.TEXT, 
 			allowNull: true
@@ -85,18 +77,19 @@ const Drivers = sequelize.define(
 				});
 
 				if (customer) {
-
 					if (entry.model_of_payment === "credit" ){  
 						const singleBottleCharge = customer.bottle_charge;  
 						customer.credit += (parseInt(singleBottleCharge) * parseInt(entry.bottle_delivered));   
 					}   
-					if (entry.mode_of_payment === "coupon" && customer.coupon_count < entry.number_of_coupon){   
+					
+					if (entry.mode_of_payment === "coupon" && customer.coupon_count <  entry.bottle_delivered){   
 						throw new Error(
 							'Customer does not have that many coupon code.'
 						)
 					} else{
-						customer.coupon_count -= entry.number_of_coupon    
+						customer.coupon_count -= entry.bottle_delivered;    
 					}
+
 
 					if (entry.bottle_received < 0 || entry.bottle_delivered < 0) {
 						throw new Error(
