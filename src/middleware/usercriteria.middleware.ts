@@ -10,7 +10,7 @@ export default function userCriteria(req: Request, res: Response, next: NextFunc
         return res.status(403).send({ message: 'Unauthorized access' });
     }
     if (req.url.includes("initial_data") && res.locals.user.role === 'driver') {
-        next();
+       return next();
     }
     next();
 }
