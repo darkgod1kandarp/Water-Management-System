@@ -207,9 +207,16 @@ const DriverEntriesController = {
 				}
 			}
 	
+			const customer = await Customer.findByPk(customerId); 
+			// Get older bottle tally of customer   
+			customer.bottle_tally += (latestEntry.bottle_received - latestEntry.bottle_delivered)
 			// Update only the latest entry
 			await latestEntry.update(req.body);
-	
+			// Update the customer tall with new one entry
+			customer.bottle_tally += (latestEntry.bottle_delivered - latestEntry.bottle_received)
+			// Save the updated customer bottle tally
+			await customer.save();
+		
 			logger.info(`Updated the latest driver entry for customer ID ${customerId}, Entry ID: ${latestEntry.id}`);
 	
 			// Log the update action
