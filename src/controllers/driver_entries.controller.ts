@@ -181,6 +181,49 @@ const DriverEntriesController = {
 		}
 	},
 
+	async deleteDriverEntries(req: Request, res: Response) {
+		try {
+			const { driverEntryId } = req.params;
+	
+			// Find the driver entry
+			const driverEntry = await DriverEntries.findByPk(driverEntryId);
+			if (!driverEntry) {
+				logger.error(`Driver entry with ID ${driverEntryId} not found`);
+				return res.status(404).json({ message: "Driver entry not found" });
+			}
+	
+			// Find the associated customer
+			const customer = await Customer.findByPk(driverEntry.customer_id);
+			if (!customer) {
+				logger.error(`Customer with ID ${driverEntry.customer_id} not found`);
+				return res.status(404).json({ message: "Associated customer not found" });
+			}
+	
+			// Adjust the customer's bottle tally before deleting the entry
+			customer.bottle_tally -= (driverEntry.bottle_received - driverEntry.bottle_delivered);
+			await customer.save(); // Save the updated tally
+	
+			// Delete the driver entry
+			await driverEntry.destroy();
+	
+			// Log the delete action
+			await Logs.create({
+				user_id: res.locals.user.id,
+				action: 'delete',
+				module: 'driver_entries',
+				message: `Deleted driver entry (ID: ${driverEntryId}) for customer ID ${driverEntry.customer_id}`,
+			});
+	
+			logger.info(`Deleted driver entry with ID: ${driverEntryId}`);
+			res.status(200).json({ message: "Driver entry deleted successfully" });
+	
+		} catch (err) {
+			console.error(err);
+			logger.error("Error while deleting driver entry");
+			return res.status(500).json({ error: "Internal Server Error" });
+		}
+	},
+	
 	async updateDriverEntries(req: Request, res: Response) {
 		try {
 			const { customerId } = req.params; // Assuming customerId is passed in the request params

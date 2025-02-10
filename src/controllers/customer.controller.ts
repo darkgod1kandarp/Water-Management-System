@@ -202,7 +202,7 @@ const CustomerController = {
 
 		if (customer.bottle_count_updated) {
 			logger.error(`Customer with id ${id} has been already updated its initial data.`)
-			return res.status(404);
+			return res.sendStatus(404);
 		}
 
 		try {
