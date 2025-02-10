@@ -38,5 +38,9 @@ route.put("/update/:customerId", (req, res) => {
     DriverEntriesController.updateDriverEntries(req, res);
 });
 
+route.delete("/:id", (req, res) => {
+    DriverEntriesController.deleteDriverEntries(req, res);  
+})
+
 
 export default route;
