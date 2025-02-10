@@ -72,7 +72,6 @@ const CustomerController = {
 			logger.info('Creating a new customer');
 			return res.json(customer);
 		} catch (error: any) {
-            console.dir(error);
 			if (error.name === 'SequelizeUniqueConstraintError') {
 				logger.error('Error while creating a new customer', error);
 				return res
@@ -190,6 +189,7 @@ const CustomerController = {
 		res.json(customers);
 	},
 
+
 	// Check for initial Data updating for customer side 
 	async updateInitialData(req: Request, res: Response){   
 		const { id } = req.params;
@@ -207,7 +207,7 @@ const CustomerController = {
 
 		try{
 			// Two field required number of bottle, bottle_count_updated, total_count_of_cupon
-			customer.update(req.body);
+			await customer.update(req.body);
 			// Creating Logs for the table to check when does number of bottles count got updated.
 			await Logs.create({
 				user_id: res.locals.user.id,
@@ -216,7 +216,7 @@ const CustomerController = {
 				message: `Updated customers one time freeze data for collecting initial data for total count of bottled and cupon available with customers. `,
 			});
 
-			res.json(customer);
+			return res.json(customer);
 		}catch (error) {
 			logger.error('Error while deleting the customer');
 			return res.sendStatus(500);
