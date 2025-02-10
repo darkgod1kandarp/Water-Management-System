@@ -207,27 +207,16 @@ const CustomerController = {
 			return res.status(400).json({ message: "Initial data has already been updated for this customer." });
 		}
 	
-		try {
-			// Ensure required fields are present in the request body
-			const { number_of_bottles, total_count_of_coupon } = req.body;
-	
-			if (number_of_bottles === undefined || total_count_of_coupon === undefined) {
-				return res.status(400).json({ message: "Missing required fields: number_of_bottles or total_count_of_coupon." });
-			}
-	
+		try {			
 			// Update the customer data
-			await customer.update({
-				number_of_bottles,
-				total_count_of_coupon,
-				bottle_count_updated: true, // Marking as updated
-			});
+			await customer.update(req.body);
 	
 			// Log the update
 			await Logs.create({
 				user_id: res.locals.user.id,
 				action: 'update',
 				module: 'customer',
-				message: `Updated initial data for customer ID ${id}: Bottles=${number_of_bottles}, Coupons=${total_count_of_coupon}.`,
+				message: `Updated initial data for customer ID ${id}`,
 			});
 	
 			logger.info(`Successfully updated initial data for customer ID ${id}`);
