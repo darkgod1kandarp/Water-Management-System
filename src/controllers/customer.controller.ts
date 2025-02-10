@@ -216,8 +216,8 @@ const CustomerController = {
 				message: `Updated customers one time freeze data for collecting initial data for total count of bottled and cupon available with customers. `,
 			});
 
-			return res.json(customer);
-		} catch (error) {
+			res.json(customer);
+		}catch (error) {
 			logger.error('Error while deleting the customer');
 
 			return res.sendStatus(500);
