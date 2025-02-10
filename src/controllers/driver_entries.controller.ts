@@ -9,13 +9,14 @@ import Logs from '../models/logs.model';
 import {jsonToCummulativeExcel, jsonToIndividualExcel} from '../Services/Excel';
 const logger = getLogger();
 const DriverEntriesController = {
+
 	async getDriverEntries(req: Request, res: Response) {
 
 		const { route, customer, driver, start, end, sort } = req.query as { route: string, customer: string, driver: string, start: string, end: string, sort: 'bottle_received' | 'bottle_delivered' | 'createdAt' };
 
 		const page = parseInt(req.query.page as string) || 1;
 		const limit = parseInt(req.query.limit as string) || 50;
-		const driverEntries = await generateIndividualReport({ startDate: start, endDate: end, customerName: customer, driverName: driver, routeId: route, isPaginated: true, page, limit, sortBy: sort }) as any;
+		const driverEntries = await generateIndividualReport({ startDate: start, endDate: end, customerName: customer, driverName: driver, routeId: route, isPaginated: true, page, limit, sortBy: sort || 'createdAt' }) as any;
 		logger.info('Getting all the driver entries');
 		res.json({
 			rows: driverEntries.rows,

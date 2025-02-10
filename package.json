@@ -6,12 +6,15 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/app.ts",
-    "start:dev" :"nodemon src/app.ts",
+    "start:dev": "nodemon src/app.ts",
     "restart:prod": "pm2 restart app",
     "prerestart:prod": "npm run build",
     "start:prod": "pm2 start app",
     "new:prod": "pm2 start dist/app.js --name app",
-    "prenew:prod": "npm run build"
+    "prenew:prod": "npm run build",
+    "db:reset": "ts-node src/scripts/resetDb.ts",
+    "db:seed": "ts-node src/scripts/seedDb.ts",
+    "db:init": "npm run db:reset && npm run db:seed"
   },
   "keywords": [],
   "author": "",

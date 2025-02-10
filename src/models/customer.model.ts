@@ -36,18 +36,22 @@ const Customers = sequelize.define('customer', {
     },
     bottle_tally: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: 0,
+        validate: {
+           min : 0
+       }
     },
     bottle_charge: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         validate: {
            min : 0
        }
     }, 
     bottle_count_updated: {
         type: DataTypes.BOOLEAN,    
-        defaultValue: false
+        defaultValue: true
     }, 
     coupon_count: {
         type: DataTypes.INTEGER, 
@@ -61,8 +65,15 @@ const Customers = sequelize.define('customer', {
 {  
     paranoid: true,
     hooks: {
-        beforeCreate: async (customer:any) => {
-            
+        beforeCreate: async (customer: any) => {
+            if (!customer.phoneNumber || !customer.coupon_count || !customer.bottle_tally || !customer.bottle_charge) {
+                customer.bottle_count_updated = false;
+                customer.credits = 0;
+                customer.coupon_count = 0;
+                customer.bottle_tally = 0;
+                customer.bottle_charge = 0;
+               
+            }
         },
     },
 },

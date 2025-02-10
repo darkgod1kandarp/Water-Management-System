@@ -16,13 +16,31 @@ const CustomerController = {
 	async getCustomers(req: Request, res: Response) {
 		const page = parseInt(req.query.page as string) || 1;
 		const limit = parseInt(req.query.limit as string) || 10;
+		const search = req.query.search as string;
+		const route_id = req.query.route_id as string;
+
+		// Build where clause based on filters
+		const whereClause: any = {};
+		
+		if (search) {
+			whereClause.name = {
+				[Op.like]: `%${search}%`
+			};
+		}
+
+		if (route_id) {
+			whereClause.route_id = route_id;
+		}
+
 		const customers = await Customer.findAll({
+			where: whereClause,
 			include: [{ model: Routes, as: 'route' }],
 			offset: (page - 1) * limit,
 			limit: limit,
 			order: [['createdAt', 'DESC']],
 		});
-		logger.info('Getting all the customers');
+
+		logger.info('Getting all the customers with filters');
 		res.json(customers);
 	},
 
@@ -179,7 +197,7 @@ const CustomerController = {
         const customer = await Customer.findByPk(id);
 		if (!customer) {
 			logger.error(`Customer with id ${id} not found`);
-			return res.sendStatus(404);
+			return res.sendStatus(404); 
 		}
 
 		if (customer.bottle_count_updated){
