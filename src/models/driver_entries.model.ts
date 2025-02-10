@@ -53,6 +53,7 @@ const Drivers = sequelize.define(
 				key: 'id',
 			},
 			allowNull: false,
+			
 			onDelete: 'CASCADE',
         },
 		comments: {
