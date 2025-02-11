@@ -47,7 +47,7 @@ const DriverEntriesController = {
 				module: 'driver_entries',
 				message: `Created driver entry with id ${driverEntry.id}`,
 			})
-			res.json(driverEntry);
+			return res.send(200).json(driverEntry);
 		} catch (error) {
 			console.log(error);
 			logger.error('Error while creating a new driver entry');
@@ -215,7 +215,7 @@ const DriverEntriesController = {
 			});
 	
 			logger.info(`Deleted driver entry with ID: ${driverEntryId}`);
-			res.status(200).json({ message: "Driver entry deleted successfully" });
+			return res.status(200).json({ message: "Driver entry deleted successfully" });
 	
 		} catch (err) {
 			console.error(err);
@@ -270,9 +270,8 @@ const DriverEntriesController = {
 				message: `Updated the latest driver entry (ID: ${latestEntry.id}) for customer ID ${customerId}`,
 			});
 	
-			res.json(latestEntry);
+			return res.status(400).json(latestEntry);
 		} catch (error) {
-			console.error(error);
 			logger.error('Error while updating the latest driver entry');
 			return res.status(500).json({ error: 'Internal Server Error' });
 		}
