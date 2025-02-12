@@ -191,38 +191,43 @@ const CustomerController = {
 
 
 	// Check for initial Data updating for customer side 
-	async updateInitialData(req: Request, res: Response) {
+	async updateInitialData(req: Request, res: Response) {   
 		const { id } = req.params;
-		// Checking if customer exists
+	
+		// Checking if the customer exists
 		const customer = await Customer.findByPk(id);
 		if (!customer) {
-			logger.error(`Customer with id ${id} not found`);
-			return res.sendStatus(404);
+			logger.error(`Customer with ID ${id} not found`);
+			return res.status(404).json({ message: "Customer not found" });
 		}
-
+	
+		// Prevent re-updating the initial data
 		if (customer.bottle_count_updated) {
-			logger.error(`Customer with id ${id} has been already updated its initial data.`)
-			return res.sendStatus(404);
+			logger.error(`Customer with ID ${id} has already updated its initial data.`);
+			return res.status(400).json({ message: "Initial data has already been updated for this customer." });
 		}
-
-		try {
-			// Two field required number of bottle, bottle_count_updated, total_count_of_cupon
+	
+		try {			
+			// Update the customer data
 			await customer.update(req.body);
-			// Creating Logs for the table to check when does number of bottles count got updated.
+	
+			// Log the update
 			await Logs.create({
 				user_id: res.locals.user.id,
 				action: 'update',
 				module: 'customer',
-				message: `Updated customers one time freeze data for collecting initial data for total count of bottled and cupon available with customers. `,
+				message: `Updated initial data for customer ID ${id}`,
 			});
-
+	
+			logger.info(`Successfully updated initial data for customer ID ${id}`);
 			return res.status(200).json(customer);
-		}catch (error) {
-			logger.error('Error while deleting the customer');
-
-			return res.sendStatus(500);
+			
+		} catch (error:any) {
+			logger.error(`Error while updating initial data for customer ID ${id}: ${error.message}`);
+			return res.status(500).json({ message: "Internal Server Error" });
 		}
 	}
+	
 };
 
 export default CustomerController;

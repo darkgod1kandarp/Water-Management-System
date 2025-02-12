@@ -13,7 +13,7 @@ const DriverEntriesController = {
 	async getDriverEntries(req: Request, res: Response) {
 
 		const { route, customer, driver, start, end, sort } = req.query as { route: string, customer: string, driver: string, start: string, end: string, sort: 'bottle_received' | 'bottle_delivered' | 'createdAt' };
-
+	
 		const page = parseInt(req.query.page as string) || 1;
 		const limit = parseInt(req.query.limit as string) || 50;
 		const driverEntries = await generateIndividualReport({ startDate: start, endDate: end, customerName: customer, driverName: driver, routeId: route, isPaginated: true, page, limit, sortBy: sort || 'createdAt' }) as any;
@@ -40,6 +40,7 @@ const DriverEntriesController = {
 	async createDriverEntry(req: Request, res: Response) {
 		try {
 			const driverEntry = await DriverEntries.create(req.body);
+			console.log(driverEntry);
 			logger.info('Creating a new driver entry');
 			await Logs.create({
 				user_id: res.locals.user.id,
@@ -47,11 +48,12 @@ const DriverEntriesController = {
 				module: 'driver_entries',
 				message: `Created driver entry with id ${driverEntry.id}`,
 			})
-			res.json(driverEntry);
+			console.log('Donnnnnnn');
+			return res.json(driverEntry);
 		} catch (error) {
 			console.log(error);
 			logger.error('Error while creating a new driver entry');
-			return res.send(500).json({ error });
+			// return res.send(500).json({ error });
 		}
 	},
 
@@ -73,7 +75,7 @@ const DriverEntriesController = {
 				limit: limit,
 			});
 			logger.info(`Getting the driver history with id ${id}`);
-			res.json(driverEntries);
+			return res.json(driverEntries);
 		} catch (error) {
 			console.log(error);
 			logger.error('Error while getting the driver history');
@@ -183,7 +185,7 @@ const DriverEntriesController = {
 
 	async deleteDriverEntries(req: Request, res: Response) {
 		try {
-			const { driverEntryId } = req.params;
+			const { id:driverEntryId } = req.params;
 	
 			// Find the driver entry
 			const driverEntry = await DriverEntries.findByPk(driverEntryId);

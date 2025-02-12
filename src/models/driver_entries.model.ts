@@ -53,6 +53,7 @@ const Drivers = sequelize.define(
 				key: 'id',
 			},
 			allowNull: false,
+			
 			onDelete: 'CASCADE',
         },
 		comments: {
@@ -75,7 +76,7 @@ const Drivers = sequelize.define(
 				const customer: any = await customerModel.findOne({
 					where: { id: entry.customer_id },
 				});
-
+				console.log(customer);
 				if (customer) {
 					if (entry.model_of_payment === "credit" ){  
 						const singleBottleCharge = customer.bottle_charge;  
