@@ -11,7 +11,7 @@ export default function userCriteria(req: Request, res: Response, next: NextFunc
     }
     if (res.locals.user.role === 'driver') {
         logger.error('User should be admin to access this route');
-        return res.send({ message: 'Unauthorized access' }).status(403);
+        return res.status(403).send({ message: 'Unauthorized access' });
     }
    
     next();
