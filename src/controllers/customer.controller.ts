@@ -21,10 +21,10 @@ const CustomerController = {
 
 		// Build where clause based on filters
 		const whereClause: any = {};
-		
+
 		if (search) {
 			whereClause.name = {
-				[Op.like]: `%${search}%`
+				[ Op.like ]: `%${search}%`
 			};
 		}
 
@@ -34,10 +34,10 @@ const CustomerController = {
 
 		const customers = await Customer.findAll({
 			where: whereClause,
-			include: [{ model: Routes, as: 'route' }],
+			include: [ { model: Routes, as: 'route' } ],
 			offset: (page - 1) * limit,
 			limit: limit,
-			order: [['createdAt', 'DESC']],
+			order: [ [ 'createdAt', 'DESC' ] ],
 		});
 
 		logger.info('Getting all the customers with filters');
@@ -59,10 +59,10 @@ const CustomerController = {
 	// Create the customer details
 	async createCustomer(req: Request, res: Response) {
 		// Ensuring customer name to be unique
-        try {
-            console.log('Creating a new customer');
+		try {
+			console.log('Creating a new customer');
 			const customer = await Customer.create(req.body);
-            console.log('Customer Created');
+			console.log('Customer Created');
 			await Logs.create({
 				user_id: res.locals.user.id,
 				action: 'create',
@@ -87,8 +87,8 @@ const CustomerController = {
 	async updateCustomer(req: Request, res: Response) {
 		const { id } = req.params;
 		// Checking if customer exists
-        const customer = await Customer.findByPk(id);
-        console.log(req.body);
+		const customer = await Customer.findByPk(id);
+		console.log(req.body);
 		if (!customer) {
 			logger.error(`Customer with id ${id} not found`);
 			return res.sendStatus(404);
@@ -156,14 +156,14 @@ const CustomerController = {
 		const { page = 1, limit = 10 } = req.query;
 		// It will find like name wise query on the customer table
 		const customer = await Customer.findAll({
-			include: [{ model: Routes, as: 'route' }],
+			include: [ { model: Routes, as: 'route' } ],
 			offset: (parseInt(page as string) - 1) * parseInt(limit as string),
 			limit: parseInt(limit as string),
 
 			where: {
 				// Represents th op.like query  here op.Like stands for operation like
 				name: {
-					[Op.like]: `%${name}%`,
+					[ Op.like ]: `%${name}%`,
 				},
 			},
 		});

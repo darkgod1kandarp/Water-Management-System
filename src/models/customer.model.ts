@@ -66,11 +66,9 @@ const Customers = sequelize.define('customer', {
     paranoid: true,
     hooks: {
         beforeCreate: async (customer: any) => {
-            if (!customer.phoneNumber || !customer.coupon_count || !customer.bottle_tally || !customer.bottle_charge) {
+            console.log(customer)
+            if (!customer.phoneNumber|| !customer.bottle_charge || !customer.address) {
                 customer.bottle_count_updated = false;
-                customer.credits = 0;
-                customer.coupon_count = 0;
-                customer.bottle_tally = 0;
                 customer.bottle_charge = 0;
                
             }

@@ -34,7 +34,7 @@ router.get('/route/:id', userCriteria,(req, res) => {
     CustomerController.findCustomerUsingRoute(req, res);
 })
 
-router.put("/:id", userCriteria, (req, res)=>{
+router.put("/initial/:id", userCriteria, (req, res)=>{
     CustomerController.updateInitialData(req, res);
 })
 
