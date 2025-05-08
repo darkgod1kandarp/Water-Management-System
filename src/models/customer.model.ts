@@ -43,10 +43,10 @@ const Customers = sequelize.define('customer', {
        }
     },
     bottle_charge: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: true,
         validate: {
-           min : 0
+           min : 0.0
        }
     }, 
     bottle_count_updated: {
