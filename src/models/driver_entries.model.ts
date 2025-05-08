@@ -87,7 +87,8 @@ const Drivers = sequelize.define(
 						throw new Error(
 							'Customer does not have that many coupon code.'
 						)
-					} else{
+					}
+					if (entry.mode_of_payment === "coupon" && customer.coupon_count >= entry.bottle_delivered) {
 						customer.coupon_count -= entry.bottle_delivered;    
 					}
 
